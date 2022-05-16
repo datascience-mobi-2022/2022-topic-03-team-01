@@ -1,0 +1,26 @@
+---
+title: "Bioinfoprojekt HeLa cells"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+MS_Table <- read.table("/Users/sinakuhnel/Desktop/Bioinfoprojekt/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
+MS_Table
+```
+
+```{r}
+str(MS_Table)
+```
+
+```{r}
+show(MS_Table$Fraction1_Ctrl_Rep1)
+```
+
+```{r}
+subset( MS_Table, subset= var(x,y = NULL))
+```
+
