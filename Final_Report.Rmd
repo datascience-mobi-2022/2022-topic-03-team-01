@@ -1,0 +1,74 @@
+---
+title: "Proteome-wide Screen for RNA-dependent Proteins in Non-Synchronized
+  HeLa cells"
+author: "Alisa Kirkin, Sina Kühnel, Ignacio Lozano Onrubia, Greta Pick"
+date: "19/07/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Final Report
+
+Idee: vielleicht keine 1-bla Nummerierung, sondern Aufteilung in Phase 1-5 und dann Unterpunkte mit Header2
+
+# 1. Introduction
+What are RNA-binding and RNA-dependent proteins?
+Why important? 
+
+## 1.1 Brief summary of experiment
+Include picture of experiment.
+
+## 1.2 Goals
+Automatic dentification of RNA-dependent proteins based on fraction shift.
+
+# 2. Description of the Dataset
+Control and RNase group
+
+# 3. Data Clean Up and Normalization 
+Clean Up is needed to...
+Split of Control and RNase group. 
+Maybe even more subtables?
+
+
+# 3.1 Data Clean Up
+No missing values -> summary function
+Removing of all 0 rows.
+
+## 3.2 Normalization 
+Why needed?
+Include picture to illustrate method.
+Normalization factor... Describe method.
+Show barplot before and after. Maybe even distribution.
+
+## 3.3 Scaling
+Why needed?
+Include formula. 
+
+# 4. Maxima and Gaussian Curve 
+
+## 4.1 Smoothing the Curve
+
+
+## 4.2 Identification of global Maxima
+
+
+## 4.3 Gauss fitting to the Curve
+
+
+
+
+
+
+
+
+
+
+
+```{r pressure, echo=FALSE}
+
+```
+
+
