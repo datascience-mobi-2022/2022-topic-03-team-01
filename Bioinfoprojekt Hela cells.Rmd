@@ -24,3 +24,10 @@ show(MS_Table$Fraction1_Ctrl_Rep1)
 subset( MS_Table, subset= var(x,y = NULL))
 ```
 
+```{r}
+# remove all-zero coloumns
+MS_Table_clear= MS_Table[, colSums(MS_Table != 0) > 0]
+MS_Table_clear
+
+```
+
