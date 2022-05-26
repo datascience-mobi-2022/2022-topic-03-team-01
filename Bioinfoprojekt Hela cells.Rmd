@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r}
-MS_Table <- read.table("/Users/gretapick/Documents/Studium/4. Semester/Bioinformatik/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
+MS_Table <- read.table("/Users/iloza/Desktop/Proteome/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
 
 #str(MS_Table)
 #subset( MS_Table, subset= var(x,y = NULL))
@@ -153,6 +153,121 @@ norm.ctrl.frc25=ctrl.frc25*norm.fact.ctrl.frc25
 
 ```
 
+```{r}
+#the same steps with the rnase table
+rnase.frc1=cbind(rnase_matrix[,1:3])
+rnase.frc2=cbind(rnase_matrix[,4:6])
+rnase.frc3=cbind(rnase_matrix[,7:9])
+rnase.frc4=cbind(rnase_matrix[,10:12])
+rnase.frc5=cbind(rnase_matrix[,13:15])
+rnase.frc6=cbind(rnase_matrix[,16:18])
+rnase.frc7=cbind(rnase_matrix[,19:21])
+rnase.frc8=cbind(rnase_matrix[,22:24])
+rnase.frc9=cbind(rnase_matrix[,25:27])
+rnase.frc10=cbind(rnase_matrix[,28:30])
+rnase.frc11=cbind(rnase_matrix[,31:33])
+rnase.frc12=cbind(rnase_matrix[,34:36])
+rnase.frc13=cbind(rnase_matrix[,37:39])
+rnase.frc14=cbind(rnase_matrix[,40:42])
+rnase.frc15=cbind(rnase_matrix[,43:45])
+rnase.frc16=cbind(rnase_matrix[,46:48])
+rnase.frc17=cbind(rnase_matrix[,49:51])
+rnase.frc18=cbind(rnase_matrix[,52:54])
+rnase.frc19=cbind(rnase_matrix[,55:57])
+rnase.frc20=cbind(rnase_matrix[,58:60])
+rnase.frc21=cbind(rnase_matrix[,61:63])
+rnase.frc22=cbind(rnase_matrix[,64:66])
+rnase.frc23=cbind(rnase_matrix[,67:69])
+rnase.frc24=cbind(rnase_matrix[,70:72])
+rnase.frc25=cbind(rnase_matrix[,73:75])
+
+
+#mean von rep1, rep2, rep3
+mean.rnase.frc1=apply(rnase.frc1,2,function(x){mean(x)})
+mean.rnase.frc2=apply(rnase.frc2,2,function(x){mean(x)})
+mean.rnase.frc3=apply(rnase.frc3,2,function(x){mean(x)})
+mean.rnase.frc4=apply(rnase.frc4,2,function(x){mean(x)})
+mean.rnase.frc5=apply(rnase.frc5,2,function(x){mean(x)})
+mean.rnase.frc6=apply(rnase.frc6,2,function(x){mean(x)})
+mean.rnase.frc7=apply(rnase.frc7,2,function(x){mean(x)})
+mean.rnase.frc8=apply(rnase.frc8,2,function(x){mean(x)})
+mean.rnase.frc9=apply(rnase.frc9,2,function(x){mean(x)})
+mean.rnase.frc10=apply(rnase.frc10,2,function(x){mean(x)})
+mean.rnase.frc11=apply(rnase.frc11,2,function(x){mean(x)})
+mean.rnase.frc12=apply(rnase.frc12,2,function(x){mean(x)})
+mean.rnase.frc13=apply(rnase.frc13,2,function(x){mean(x)})
+mean.rnase.frc14=apply(rnase.frc14,2,function(x){mean(x)})
+mean.rnase.frc15=apply(rnase.frc15,2,function(x){mean(x)})
+mean.rnase.frc16=apply(rnase.frc16,2,function(x){mean(x)})
+mean.rnase.frc17=apply(rnase.frc17,2,function(x){mean(x)})
+mean.rnase.frc18=apply(rnase.frc18,2,function(x){mean(x)})
+mean.rnase.frc19=apply(rnase.frc19,2,function(x){mean(x)})
+mean.rnase.frc20=apply(rnase.frc20,2,function(x){mean(x)})
+mean.rnase.frc21=apply(rnase.frc21,2,function(x){mean(x)})
+mean.rnase.frc22=apply(rnase.frc22,2,function(x){mean(x)})
+mean.rnase.frc23=apply(rnase.frc23,2,function(x){mean(x)})
+mean.rnase.frc24=apply(rnase.frc24,2,function(x){mean(x)})
+mean.rnase.frc25=apply(rnase.frc25,2,function(x){mean(x)})
+
+
+
+#compute normalization factor 
+norm.fact.rnase.frc1=norm.mean(mean.rnase.frc1)/mean.rnase.frc1
+norm.fact.rnase.frc2=norm.mean(mean.rnase.frc2)/mean.rnase.frc2
+norm.fact.rnase.frc3=norm.mean(mean.rnase.frc3)/mean.rnase.frc3
+norm.fact.rnase.frc4=norm.mean(mean.rnase.frc4)/mean.rnase.frc4
+norm.fact.rnase.frc5=norm.mean(mean.rnase.frc5)/mean.rnase.frc5
+norm.fact.rnase.frc6=norm.mean(mean.rnase.frc6)/mean.rnase.frc6
+norm.fact.rnase.frc7=norm.mean(mean.rnase.frc7)/mean.rnase.frc7
+norm.fact.rnase.frc8=norm.mean(mean.rnase.frc8)/mean.rnase.frc8
+norm.fact.rnase.frc9=norm.mean(mean.rnase.frc9)/mean.rnase.frc9
+norm.fact.rnase.frc10=norm.mean(mean.rnase.frc10)/mean.rnase.frc10
+norm.fact.rnase.frc11=norm.mean(mean.rnase.frc11)/mean.rnase.frc11
+norm.fact.rnase.frc12=norm.mean(mean.rnase.frc12)/mean.rnase.frc12
+norm.fact.rnase.frc13=norm.mean(mean.rnase.frc13)/mean.rnase.frc13
+norm.fact.rnase.frc14=norm.mean(mean.rnase.frc14)/mean.rnase.frc14
+norm.fact.rnase.frc15=norm.mean(mean.rnase.frc15)/mean.rnase.frc15
+norm.fact.rnase.frc16=norm.mean(mean.rnase.frc16)/mean.rnase.frc16
+norm.fact.rnase.frc17=norm.mean(mean.rnase.frc17)/mean.rnase.frc17
+norm.fact.rnase.frc18=norm.mean(mean.rnase.frc18)/mean.rnase.frc18
+norm.fact.rnase.frc19=norm.mean(mean.rnase.frc19)/mean.rnase.frc19
+norm.fact.rnase.frc20=norm.mean(mean.rnase.frc20)/mean.rnase.frc20
+norm.fact.rnase.frc21=norm.mean(mean.rnase.frc21)/mean.rnase.frc21
+norm.fact.rnase.frc22=norm.mean(mean.rnase.frc22)/mean.rnase.frc22
+norm.fact.rnase.frc23=norm.mean(mean.rnase.frc23)/mean.rnase.frc23
+norm.fact.rnase.frc24=norm.mean(mean.rnase.frc24)/mean.rnase.frc24
+norm.fact.rnase.frc25=norm.mean(mean.rnase.frc25)/mean.rnase.frc25
+
+
+
+#normed values for rnase
+norm.rnase.frc1=rnase.frc1*norm.fact.rnase.frc1
+norm.rnase.frc2=rnase.frc2*norm.fact.rnase.frc2
+norm.rnase.frc3=rnase.frc3*norm.fact.rnase.frc3
+norm.rnase.frc4=rnase.frc4*norm.fact.rnase.frc4
+norm.rnase.frc5=rnase.frc5*norm.fact.rnase.frc5
+norm.rnase.frc6=rnase.frc6*norm.fact.rnase.frc6
+norm.rnase.frc7=rnase.frc7*norm.fact.rnase.frc7
+norm.rnase.frc8=rnase.frc8*norm.fact.rnase.frc8
+norm.rnase.frc9=rnase.frc9*norm.fact.rnase.frc9
+norm.rnase.frc10=rnase.frc10*norm.fact.rnase.frc10
+norm.rnase.frc11=rnase.frc11*norm.fact.rnase.frc11
+norm.rnase.frc12=rnase.frc12*norm.fact.rnase.frc12
+norm.rnase.frc13=rnase.frc13*norm.fact.rnase.frc13
+norm.rnase.frc14=rnase.frc14*norm.fact.rnase.frc14
+norm.rnase.frc15=rnase.frc15*norm.fact.rnase.frc15
+norm.rnase.frc16=rnase.frc16*norm.fact.rnase.frc16
+norm.rnase.frc17=rnase.frc17*norm.fact.rnase.frc17
+norm.rnase.frc18=rnase.frc18*norm.fact.rnase.frc18
+norm.rnase.frc19=rnase.frc19*norm.fact.rnase.frc19
+norm.rnase.frc20=rnase.frc20*norm.fact.rnase.frc20
+norm.rnase.frc21=rnase.frc21*norm.fact.rnase.frc21
+norm.rnase.frc22=rnase.frc22*norm.fact.rnase.frc22
+norm.rnase.frc23=rnase.frc23*norm.fact.rnase.frc23
+norm.rnase.frc24=rnase.frc24*norm.fact.rnase.frc24
+norm.rnase.frc25=rnase.frc25*norm.fact.rnase.frc25
+
+```
 
 
 
