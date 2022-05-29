@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r}
-MS_Table <- read.table("/Users/iloza/Desktop/Proteome/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
+MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
 
 #str(MS_Table)
 #subset( MS_Table, subset= var(x,y = NULL))
@@ -22,7 +22,7 @@ rnase_matrix=cbind(MS_Table[, seq(1,150,2)])
 
 #1.2 Removing all zero rows
 ctrl_matrix[rowSums(ctrl_matrix[])>0,]
-rnase_matrix[rowSums(ctrl_matrix[])>0,]
+rnase_matrix[rowSums(rnase_matrix[])>0,]
 
 #1.3 Normalization
 #Loopen mit sapply
@@ -272,6 +272,47 @@ norm.rnase.frc25=rnase.frc25*norm.fact.rnase.frc25
 
 
 
+```{r}
+#organize the different samples
+condition <- factor(rep(c("ctrl1","rnase1","ctrl2","rnase2","ctrl3","rnase3"),25))
+# define subtables for each condition
+data.ctrl1 <- data$condition =="ctrl1"
+data.ctrl2 <- data$condition =="ctrl2"
+data.ctrl3 <- data$condition =="ctrl3"
+data.rnase1 <- data$condition =="rnase1"
+data.rnase2 <- data$condition =="rnase2"
+data.rnase3 <- data$condition =="rnase3"
+
+# create vectors containing norm values of fraction 1 to 25
+norm.ctrl1 <- c(norm.ctrl.frc1[1],norm.ctrl.frc2[1],norm.ctrl.frc3[1],norm.ctrl.frc4[1],norm.ctrl.frc5[1],norm.ctrl.frc6[1],norm.ctrl.frc7[1],norm.ctrl.frc8[1],norm.ctrl.frc9[1],norm.ctrl.frc10[1],norm.ctrl.frc11[1],norm.ctrl.frc12[1],norm.ctrl.frc13[1],norm.ctrl.frc14[1],norm.ctrl.frc15[1],norm.ctrl.frc16[1],norm.ctrl.frc17[1],norm.ctrl.frc18[1],norm.ctrl.frc19[1],norm.ctrl.frc20[1],norm.ctrl.frc21[1],norm.ctrl.frc22[1],norm.ctrl.frc23[1],norm.ctrl.frc24[1],norm.ctrl.frc25[1])
+
+norm.ctrl2 <- c(norm.ctrl.frc1[2],norm.ctrl.frc2[2],norm.ctrl.frc3[2],norm.ctrl.frc4[2],norm.ctrl.frc5[2],norm.ctrl.frc6[2],norm.ctrl.frc7[2],norm.ctrl.frc8[2],norm.ctrl.frc9[2],norm.ctrl.frc10[2],norm.ctrl.frc11[2],norm.ctrl.frc12[2],norm.ctrl.frc13[2],norm.ctrl.frc14[2],norm.ctrl.frc15[2],norm.ctrl.frc16[2],norm.ctrl.frc17[2],norm.ctrl.frc18[2],norm.ctrl.frc19[2],norm.ctrl.frc20[2],norm.ctrl.frc21[2],norm.ctrl.frc22[2],norm.ctrl.frc23[2],norm.ctrl.frc24[2],norm.ctrl.frc25[2])
+
+norm.ctrl3 <- c(norm.ctrl.frc1[3],norm.ctrl.frc2[3],norm.ctrl.frc3[3],norm.ctrl.frc4[3],norm.ctrl.frc5[3],norm.ctrl.frc6[3],norm.ctrl.frc7[3],norm.ctrl.frc8[3],norm.ctrl.frc9[3],norm.ctrl.frc10[3],norm.ctrl.frc11[3],norm.ctrl.frc12[3],norm.ctrl.frc13[3],norm.ctrl.frc14[3],norm.ctrl.frc15[3],norm.ctrl.frc16[3],norm.ctrl.frc17[3],norm.ctrl.frc18[3],norm.ctrl.frc19[3],norm.ctrl.frc20[3],norm.ctrl.frc21[3],norm.ctrl.frc22[3],norm.ctrl.frc23[3],norm.ctrl.frc24[3],norm.ctrl.frc25[3])
+
+norm.rnase1 <- c(norm.rnase.frc1[1],norm.rnase.frc2[1],norm.rnase.frc3[1],norm.rnase.frc4[1],norm.rnase.frc5[1],norm.rnase.frc6[1],norm.rnase.frc7[1],norm.rnase.frc8[1],norm.rnase.frc9[1],norm.rnase.frc10[1],norm.rnase.frc11[1],norm.rnase.frc12[1],norm.rnase.frc13[1],norm.rnase.frc14[1],norm.rnase.frc15[1],norm.rnase.frc16[1],norm.rnase.frc17[1],norm.rnase.frc18[1],norm.rnase.frc19[1],norm.rnase.frc20[1],norm.rnase.frc21[1],norm.rnase.frc22[1],norm.rnase.frc23[1],norm.rnase.frc24[1],norm.rnase.frc25[1])
+
+norm.rnase2 <- c(norm.rnase.frc1[2],norm.rnase.frc2[2],norm.rnase.frc3[2],norm.rnase.frc4[2],norm.rnase.frc5[2],norm.rnase.frc6[2],norm.rnase.frc7[2],norm.rnase.frc8[2],norm.rnase.frc9[2],norm.rnase.frc10[2],norm.rnase.frc11[2],norm.rnase.frc12[2],
+norm.rnase.frc13[2],norm.rnase.frc14[2],norm.rnase.frc15[2],norm.rnase.frc16[2],norm.rnase.frc17[2],norm.rnase.frc18[2],norm.rnase.frc19[2],norm.rnase.frc20[2],norm.rnase.frc21[2],norm.rnase.frc22[2],norm.rnase.frc23[2],norm.rnase.frc24[2],norm.rnase.frc25[2])
+
+norm.rnase3 <- c(norm.rnase.frc1[3],norm.rnase.frc2[3],norm.rnase.frc3[3],norm.rnase.frc4[3],norm.rnase.frc5[3],norm.rnase.frc6[3],norm.rnase.frc7[3],norm.rnase.frc8[3],norm.rnase.frc9[3],norm.rnase.frc10[3],norm.rnase.frc11[3],norm.rnase.frc12[3],norm.rnase.frc13[3],norm.rnase.frc14[3],norm.rnase.frc15[3],norm.rnase.frc16[3],norm.rnase.frc17[3],norm.rnase.frc18[3],norm.rnase.frc19[3],norm.rnase.frc20[3],norm.rnase.frc21[3],norm.rnase.frc22[3],norm.rnase.frc23[3],norm.rnase.frc24[3],norm.rnase.frc25[3])
+
+as.data.frame(norm.ctrl1)
+
+
+# normalization over the sum of 100% 
+for (i in 1:4765) {
+  x <- sum(xx)/ 100
+  xxx= xx/ x
+}
+1:nrow(xx)
+
+xx = as.matrix(Matrixctrl1)
+
+Matrixctrl1 <- cbind(norm.ctrl1[["Fraction1_Ctrl_Rep1"]],norm.ctrl1[["Fraction2_Ctrl_Rep1"]],norm.ctrl1[["Fraction3_Ctrl_Rep1"]],norm.ctrl1[["Fraction4_Ctrl_Rep1"]],norm.ctrl1[["Fraction5_Ctrl_Rep1"]],norm.ctrl1[["Fraction6_Ctrl_Rep1"]],norm.ctrl1[["Fraction7_Ctrl_Rep1"]],norm.ctrl1[["Fraction8_Ctrl_Rep1"]],norm.ctrl1[["Fraction9_Ctrl_Rep1"]],norm.ctrl1[["Fraction10_Ctrl_Rep1"]],norm.ctrl1[["Fraction11_Ctrl_Rep1"]],norm.ctrl1[["Fraction12_Ctrl_Rep1"]],norm.ctrl1[["Fraction13_Ctrl_Rep1"]],norm.ctrl1[["Fraction14_Ctrl_Rep1"]],norm.ctrl1[["Fraction15_Ctrl_Rep1"]],norm.ctrl1[["Fraction16_Ctrl_Rep1"]],norm.ctrl1[["Fraction17_Ctrl_Rep1"]],norm.ctrl1[["Fraction18_Ctrl_Rep1"]],norm.ctrl1[["Fraction19_Ctrl_Rep1"]],norm.ctrl1[["Fraction20_Ctrl_Rep1"]],norm.ctrl1[["Fraction21_Ctrl_Rep1"]],norm.ctrl1[["Fraction22_Ctrl_Rep1"]],norm.ctrl1[["Fraction23_Ctrl_Rep1"]],norm.ctrl1[["Fraction24_Ctrl_Rep1"]],norm.ctrl1[["Fraction25_Ctrl_Rep1"]])
+
+View(xxx)
+```
 
 
 ```
