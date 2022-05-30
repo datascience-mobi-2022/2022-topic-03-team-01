@@ -312,6 +312,7 @@ xx = as.matrix(Matrixctrl1)
 Matrixctrl1 <- cbind(norm.ctrl1[["Fraction1_Ctrl_Rep1"]],norm.ctrl1[["Fraction2_Ctrl_Rep1"]],norm.ctrl1[["Fraction3_Ctrl_Rep1"]],norm.ctrl1[["Fraction4_Ctrl_Rep1"]],norm.ctrl1[["Fraction5_Ctrl_Rep1"]],norm.ctrl1[["Fraction6_Ctrl_Rep1"]],norm.ctrl1[["Fraction7_Ctrl_Rep1"]],norm.ctrl1[["Fraction8_Ctrl_Rep1"]],norm.ctrl1[["Fraction9_Ctrl_Rep1"]],norm.ctrl1[["Fraction10_Ctrl_Rep1"]],norm.ctrl1[["Fraction11_Ctrl_Rep1"]],norm.ctrl1[["Fraction12_Ctrl_Rep1"]],norm.ctrl1[["Fraction13_Ctrl_Rep1"]],norm.ctrl1[["Fraction14_Ctrl_Rep1"]],norm.ctrl1[["Fraction15_Ctrl_Rep1"]],norm.ctrl1[["Fraction16_Ctrl_Rep1"]],norm.ctrl1[["Fraction17_Ctrl_Rep1"]],norm.ctrl1[["Fraction18_Ctrl_Rep1"]],norm.ctrl1[["Fraction19_Ctrl_Rep1"]],norm.ctrl1[["Fraction20_Ctrl_Rep1"]],norm.ctrl1[["Fraction21_Ctrl_Rep1"]],norm.ctrl1[["Fraction22_Ctrl_Rep1"]],norm.ctrl1[["Fraction23_Ctrl_Rep1"]],norm.ctrl1[["Fraction24_Ctrl_Rep1"]],norm.ctrl1[["Fraction25_Ctrl_Rep1"]])
 
 View(xxx)
+barplot(xxx)
 ```
 
 
