@@ -279,25 +279,60 @@ norm.rnase.frc13[2],norm.rnase.frc14[2],norm.rnase.frc15[2],norm.rnase.frc16[2],
 
 norm.rnase3 <- cbind(norm.rnase.frc1[3],norm.rnase.frc2[3],norm.rnase.frc3[3],norm.rnase.frc4[3],norm.rnase.frc5[3],norm.rnase.frc6[3],norm.rnase.frc7[3],norm.rnase.frc8[3],norm.rnase.frc9[3],norm.rnase.frc10[3],norm.rnase.frc11[3],norm.rnase.frc12[3],norm.rnase.frc13[3],norm.rnase.frc14[3],norm.rnase.frc15[3],norm.rnase.frc16[3],norm.rnase.frc17[3],norm.rnase.frc18[3],norm.rnase.frc19[3],norm.rnase.frc20[3],norm.rnase.frc21[3],norm.rnase.frc22[3],norm.rnase.frc23[3],norm.rnase.frc24[3],norm.rnase.frc25[3])
 
-# vorher spalten normalisieren für jedes rep damit reps dann verglichen werden können
-sum1 <- rowSums(norm.ctrl1)
-scaled1 <- sum1 / 100
-scaledctrl1 <- norm.ctrl1[1,] / scaled1
+# vorher spalten normalisieren für jedes rep damit reps dann verglichen werden können?
 
+# normalization smaple 1ctrl
+datanormctrl1 <- as.data.frame(norm.ctrl1)
 
-for (i in 1:nrow(norm.ctrl1)){
-  scaled1 <- sum(norm.ctrl1[i, ]) / 100
-  norm.ctrl1[i, ] = norm.ctrl1[i,] / scaled1
+for (i in 1:nrow(datanormctrl1)) {
+  x <- sum(datanormctrl1[i, ]) / 100
+  datanormctrl1[i, ] = datanormctrl1[i, ] / x
 }
-# normalization over the sum of 100% 
-for (i in 1:nrow(norm.ctrl1)) 
-  xx[i, ] <- sum(norm.ctrl1[i, ])/((sum(norm.ctrl1[i, ])/ 100))
-          return(xx)
 
-#scale <- function(x) {
-  sum(norm.ctrl1[1, ])/((sum(norm.ctrl1[1, ])/ 100))
+# normalization sample 2ctrl
+datanormctrl2 <- as.data.frame(norm.ctrl2)
+
+for (i in 1:nrow(datanormctrl2)) {
+  x <- sum(datanormctrl2[i, ]) / 100
+  datanormctrl2[i, ] = datanormctrl2[i, ] / x
 }
-scale(norm.ctrl1)
+
+# normalization sample 3ctrl
+
+datanormctrl3 <- as.data.frame(norm.ctrl3)
+
+for (i in 1:nrow(datanormctrl3)) {
+  x <- sum(datanormctrl3[i, ]) / 100
+  datanormctrl3[i, ] = datanormctrl3[i, ] / x
+}
+
+#normalization sample 1 rnase
+
+datanormrnase1 <- as.data.frame(norm.rnase1)
+
+for (i in 1:nrow(datanormrnase1)){
+  x <- sum(datanormrnase1[i, ])/ 100
+  datanormrnase1[i, ] = datanormrnase1[i, ] / x
+}
+  
+#normalization sample 2 rnase
+
+datanormrnase2 <- as.data.frame(norm.rnase2)
+
+for (i in 1:nrow(datanormrnase2)) {
+  x <- sum(datanormrnase2[i, ]) /100
+  datanormrnase2[i, ] = datanormrnase2[i, ] / x
+}
+
+#normalization sample3 rnase
+
+datanormrnase3 <- as.data.frame(norm.rnase3)
+
+for (i in 1:nrow(datanormrnase3)) {
+  x <- sum(datanormrnase3[i, ]) / 100
+  datanormrnase3[i, ] = datanormrnase3[i, ] / x
+}
+
 # doppelte klammern bei liste 
 #r studio clear environment
 #nur auf eine spalte probieren das scaling
