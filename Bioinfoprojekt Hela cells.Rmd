@@ -252,6 +252,7 @@ norm.rnase.frc23=data.frame(mapply('*', rnase.frc23, norm.fact.rnase.frc23, SIMP
 norm.rnase.frc24=data.frame(mapply('*', rnase.frc24, norm.fact.rnase.frc24, SIMPLIFY=FALSE))
 norm.rnase.frc25=data.frame(mapply('*', rnase.frc25, norm.fact.rnase.frc25, SIMPLIFY=FALSE))
 
+
 #split nach transponieren für liste
 
 #organize the different samples
@@ -289,6 +290,8 @@ for (i in 1:nrow(datanormctrl1)) {
   datanormctrl1[i, ] = datanormctrl1[i, ] / x
 }
 
+datanormctrl1[is.na(datanormctrl1)] <- 0
+
 # normalization sample 2ctrl
 datanormctrl2 <- as.data.frame(norm.ctrl2)
 
@@ -296,6 +299,7 @@ for (i in 1:nrow(datanormctrl2)) {
   x <- sum(datanormctrl2[i, ]) / 100
   datanormctrl2[i, ] = datanormctrl2[i, ] / x
 }
+datanormctrl2[is.na(datanormctrl2)] <- 0
 
 # normalization sample 3ctrl
 
@@ -306,6 +310,8 @@ for (i in 1:nrow(datanormctrl3)) {
   datanormctrl3[i, ] = datanormctrl3[i, ] / x
 }
 
+datanormctrl3[is.na(datanormctrl3)] <- 0 
+
 #normalization sample 1 rnase
 
 datanormrnase1 <- as.data.frame(norm.rnase1)
@@ -314,7 +320,9 @@ for (i in 1:nrow(datanormrnase1)){
   x <- sum(datanormrnase1[i, ])/ 100
   datanormrnase1[i, ] = datanormrnase1[i, ] / x
 }
-  
+
+datanormrnase1[is.na(datanormrnase1)] <- 0
+
 #normalization sample 2 rnase
 
 datanormrnase2 <- as.data.frame(norm.rnase2)
@@ -324,6 +332,8 @@ for (i in 1:nrow(datanormrnase2)) {
   datanormrnase2[i, ] = datanormrnase2[i, ] / x
 }
 
+datanormrnase2[is.na(datanormctrl2)] <- 0
+
 #normalization sample3 rnase
 
 datanormrnase3 <- as.data.frame(norm.rnase3)
@@ -332,6 +342,9 @@ for (i in 1:nrow(datanormrnase3)) {
   x <- sum(datanormrnase3[i, ]) / 100
   datanormrnase3[i, ] = datanormrnase3[i, ] / x
 }
+
+datanormrnase3[is.na(datanormrnase3)] <- 0
+
 
 # doppelte klammern bei liste 
 #r studio clear environment
