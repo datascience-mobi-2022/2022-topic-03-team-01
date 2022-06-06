@@ -25,7 +25,6 @@ ctrl_matrix[rowSums(ctrl_matrix[])>0,]
 rnase_matrix[rowSums(rnase_matrix[])>0,]
 
 #1.3 Normalization
-#Loopen mit sapply
 ctrl.frc1=cbind(ctrl_matrix[,1:3])
 ctrl.frc2=cbind(ctrl_matrix[,4:6])
 ctrl.frc3=cbind(ctrl_matrix[,7:9])
@@ -51,6 +50,32 @@ ctrl.frc22=cbind(ctrl_matrix[,64:66])
 ctrl.frc23=cbind(ctrl_matrix[,67:69])
 ctrl.frc24=cbind(ctrl_matrix[,70:72])
 ctrl.frc25=cbind(ctrl_matrix[,73:75])
+
+rnase.frc1=cbind(rnase_matrix[,1:3])
+rnase.frc2=cbind(rnase_matrix[,4:6])
+rnase.frc3=cbind(rnase_matrix[,7:9])
+rnase.frc4=cbind(rnase_matrix[,10:12])
+rnase.frc5=cbind(rnase_matrix[,13:15])
+rnase.frc6=cbind(rnase_matrix[,16:18])
+rnase.frc7=cbind(rnase_matrix[,19:21])
+rnase.frc8=cbind(rnase_matrix[,22:24])
+rnase.frc9=cbind(rnase_matrix[,25:27])
+rnase.frc10=cbind(rnase_matrix[,28:30])
+rnase.frc11=cbind(rnase_matrix[,31:33])
+rnase.frc12=cbind(rnase_matrix[,34:36])
+rnase.frc13=cbind(rnase_matrix[,37:39])
+rnase.frc14=cbind(rnase_matrix[,40:42])
+rnase.frc15=cbind(rnase_matrix[,43:45])
+rnase.frc16=cbind(rnase_matrix[,46:48])
+rnase.frc17=cbind(rnase_matrix[,49:51])
+rnase.frc18=cbind(rnase_matrix[,52:54])
+rnase.frc19=cbind(rnase_matrix[,55:57])
+rnase.frc20=cbind(rnase_matrix[,58:60])
+rnase.frc21=cbind(rnase_matrix[,61:63])
+rnase.frc22=cbind(rnase_matrix[,64:66])
+rnase.frc23=cbind(rnase_matrix[,67:69])
+rnase.frc24=cbind(rnase_matrix[,70:72])
+rnase.frc25=cbind(rnase_matrix[,73:75])
 
 #mean von rep1, rep2, rep3
 mean.ctrl.frc1=apply(ctrl.frc1,2,function(x){mean(x)})
@@ -78,6 +103,32 @@ mean.ctrl.frc22=apply(ctrl.frc22,2,function(x){mean(x)})
 mean.ctrl.frc23=apply(ctrl.frc23,2,function(x){mean(x)})
 mean.ctrl.frc24=apply(ctrl.frc24,2,function(x){mean(x)})
 mean.ctrl.frc25=apply(ctrl.frc25,2,function(x){mean(x)})
+
+mean.rnase.frc1=apply(rnase.frc1,2,function(x){mean(x)})
+mean.rnase.frc2=apply(rnase.frc2,2,function(x){mean(x)})
+mean.rnase.frc3=apply(rnase.frc3,2,function(x){mean(x)})
+mean.rnase.frc4=apply(rnase.frc4,2,function(x){mean(x)})
+mean.rnase.frc5=apply(rnase.frc5,2,function(x){mean(x)})
+mean.rnase.frc6=apply(rnase.frc6,2,function(x){mean(x)})
+mean.rnase.frc7=apply(rnase.frc7,2,function(x){mean(x)})
+mean.rnase.frc8=apply(rnase.frc8,2,function(x){mean(x)})
+mean.rnase.frc9=apply(rnase.frc9,2,function(x){mean(x)})
+mean.rnase.frc10=apply(rnase.frc10,2,function(x){mean(x)})
+mean.rnase.frc11=apply(rnase.frc11,2,function(x){mean(x)})
+mean.rnase.frc12=apply(rnase.frc12,2,function(x){mean(x)})
+mean.rnase.frc13=apply(rnase.frc13,2,function(x){mean(x)})
+mean.rnase.frc14=apply(rnase.frc14,2,function(x){mean(x)})
+mean.rnase.frc15=apply(rnase.frc15,2,function(x){mean(x)})
+mean.rnase.frc16=apply(rnase.frc16,2,function(x){mean(x)})
+mean.rnase.frc17=apply(rnase.frc17,2,function(x){mean(x)})
+mean.rnase.frc18=apply(rnase.frc18,2,function(x){mean(x)})
+mean.rnase.frc19=apply(rnase.frc19,2,function(x){mean(x)})
+mean.rnase.frc20=apply(rnase.frc20,2,function(x){mean(x)})
+mean.rnase.frc21=apply(rnase.frc21,2,function(x){mean(x)})
+mean.rnase.frc22=apply(rnase.frc22,2,function(x){mean(x)})
+mean.rnase.frc23=apply(rnase.frc23,2,function(x){mean(x)})
+mean.rnase.frc24=apply(rnase.frc24,2,function(x){mean(x)})
+mean.rnase.frc25=apply(rnase.frc25,2,function(x){mean(x)})
 
 #function "small.diff" find reps with smallest difference of the means
 norm.mean = function(x) {
@@ -124,94 +175,6 @@ norm.fact.ctrl.frc23=norm.mean(mean.ctrl.frc23)/mean.ctrl.frc23
 norm.fact.ctrl.frc24=norm.mean(mean.ctrl.frc24)/mean.ctrl.frc24
 norm.fact.ctrl.frc25=norm.mean(mean.ctrl.frc25)/mean.ctrl.frc25
 
-#normed values for control
-norm.ctrl.frc1=ctrl.frc1*norm.fact.ctrl.frc1
-norm.ctrl.frc2=ctrl.frc2*norm.fact.ctrl.frc2
-norm.ctrl.frc3=ctrl.frc3*norm.fact.ctrl.frc3
-norm.ctrl.frc4=ctrl.frc4*norm.fact.ctrl.frc4
-norm.ctrl.frc5=ctrl.frc5*norm.fact.ctrl.frc5
-norm.ctrl.frc6=ctrl.frc6*norm.fact.ctrl.frc6
-norm.ctrl.frc7=ctrl.frc7*norm.fact.ctrl.frc7
-norm.ctrl.frc8=ctrl.frc8*norm.fact.ctrl.frc8
-norm.ctrl.frc9=ctrl.frc9*norm.fact.ctrl.frc9
-norm.ctrl.frc10=ctrl.frc10*norm.fact.ctrl.frc10
-norm.ctrl.frc11=ctrl.frc11*norm.fact.ctrl.frc11
-norm.ctrl.frc12=ctrl.frc12*norm.fact.ctrl.frc12
-norm.ctrl.frc13=ctrl.frc13*norm.fact.ctrl.frc13
-norm.ctrl.frc14=ctrl.frc14*norm.fact.ctrl.frc14
-norm.ctrl.frc15=ctrl.frc15*norm.fact.ctrl.frc15
-norm.ctrl.frc16=ctrl.frc16*norm.fact.ctrl.frc16
-norm.ctrl.frc17=ctrl.frc17*norm.fact.ctrl.frc17
-norm.ctrl.frc18=ctrl.frc18*norm.fact.ctrl.frc18
-norm.ctrl.frc19=ctrl.frc19*norm.fact.ctrl.frc19
-norm.ctrl.frc20=ctrl.frc20*norm.fact.ctrl.frc20
-norm.ctrl.frc21=ctrl.frc21*norm.fact.ctrl.frc21
-norm.ctrl.frc22=ctrl.frc22*norm.fact.ctrl.frc22
-norm.ctrl.frc23=ctrl.frc23*norm.fact.ctrl.frc23
-norm.ctrl.frc24=ctrl.frc24*norm.fact.ctrl.frc24
-norm.ctrl.frc25=ctrl.frc25*norm.fact.ctrl.frc25
-
-```
-
-```{r}
-#the same steps with the rnase table
-rnase.frc1=cbind(rnase_matrix[,1:3])
-rnase.frc2=cbind(rnase_matrix[,4:6])
-rnase.frc3=cbind(rnase_matrix[,7:9])
-rnase.frc4=cbind(rnase_matrix[,10:12])
-rnase.frc5=cbind(rnase_matrix[,13:15])
-rnase.frc6=cbind(rnase_matrix[,16:18])
-rnase.frc7=cbind(rnase_matrix[,19:21])
-rnase.frc8=cbind(rnase_matrix[,22:24])
-rnase.frc9=cbind(rnase_matrix[,25:27])
-rnase.frc10=cbind(rnase_matrix[,28:30])
-rnase.frc11=cbind(rnase_matrix[,31:33])
-rnase.frc12=cbind(rnase_matrix[,34:36])
-rnase.frc13=cbind(rnase_matrix[,37:39])
-rnase.frc14=cbind(rnase_matrix[,40:42])
-rnase.frc15=cbind(rnase_matrix[,43:45])
-rnase.frc16=cbind(rnase_matrix[,46:48])
-rnase.frc17=cbind(rnase_matrix[,49:51])
-rnase.frc18=cbind(rnase_matrix[,52:54])
-rnase.frc19=cbind(rnase_matrix[,55:57])
-rnase.frc20=cbind(rnase_matrix[,58:60])
-rnase.frc21=cbind(rnase_matrix[,61:63])
-rnase.frc22=cbind(rnase_matrix[,64:66])
-rnase.frc23=cbind(rnase_matrix[,67:69])
-rnase.frc24=cbind(rnase_matrix[,70:72])
-rnase.frc25=cbind(rnase_matrix[,73:75])
-
-
-#mean von rep1, rep2, rep3
-mean.rnase.frc1=apply(rnase.frc1,2,function(x){mean(x)})
-mean.rnase.frc2=apply(rnase.frc2,2,function(x){mean(x)})
-mean.rnase.frc3=apply(rnase.frc3,2,function(x){mean(x)})
-mean.rnase.frc4=apply(rnase.frc4,2,function(x){mean(x)})
-mean.rnase.frc5=apply(rnase.frc5,2,function(x){mean(x)})
-mean.rnase.frc6=apply(rnase.frc6,2,function(x){mean(x)})
-mean.rnase.frc7=apply(rnase.frc7,2,function(x){mean(x)})
-mean.rnase.frc8=apply(rnase.frc8,2,function(x){mean(x)})
-mean.rnase.frc9=apply(rnase.frc9,2,function(x){mean(x)})
-mean.rnase.frc10=apply(rnase.frc10,2,function(x){mean(x)})
-mean.rnase.frc11=apply(rnase.frc11,2,function(x){mean(x)})
-mean.rnase.frc12=apply(rnase.frc12,2,function(x){mean(x)})
-mean.rnase.frc13=apply(rnase.frc13,2,function(x){mean(x)})
-mean.rnase.frc14=apply(rnase.frc14,2,function(x){mean(x)})
-mean.rnase.frc15=apply(rnase.frc15,2,function(x){mean(x)})
-mean.rnase.frc16=apply(rnase.frc16,2,function(x){mean(x)})
-mean.rnase.frc17=apply(rnase.frc17,2,function(x){mean(x)})
-mean.rnase.frc18=apply(rnase.frc18,2,function(x){mean(x)})
-mean.rnase.frc19=apply(rnase.frc19,2,function(x){mean(x)})
-mean.rnase.frc20=apply(rnase.frc20,2,function(x){mean(x)})
-mean.rnase.frc21=apply(rnase.frc21,2,function(x){mean(x)})
-mean.rnase.frc22=apply(rnase.frc22,2,function(x){mean(x)})
-mean.rnase.frc23=apply(rnase.frc23,2,function(x){mean(x)})
-mean.rnase.frc24=apply(rnase.frc24,2,function(x){mean(x)})
-mean.rnase.frc25=apply(rnase.frc25,2,function(x){mean(x)})
-
-
-
-#compute normalization factor 
 norm.fact.rnase.frc1=norm.mean(mean.rnase.frc1)/mean.rnase.frc1
 norm.fact.rnase.frc2=norm.mean(mean.rnase.frc2)/mean.rnase.frc2
 norm.fact.rnase.frc3=norm.mean(mean.rnase.frc3)/mean.rnase.frc3
@@ -238,41 +201,60 @@ norm.fact.rnase.frc23=norm.mean(mean.rnase.frc23)/mean.rnase.frc23
 norm.fact.rnase.frc24=norm.mean(mean.rnase.frc24)/mean.rnase.frc24
 norm.fact.rnase.frc25=norm.mean(mean.rnase.frc25)/mean.rnase.frc25
 
-#split nach transponieren für liste
+#normed values 
+norm.ctrl.frc1=data.frame(mapply('*', ctrl.frc1, norm.fact.ctrl.frc1, SIMPLIFY=FALSE))
+norm.ctrl.frc2=data.frame(mapply('*', ctrl.frc2, norm.fact.ctrl.frc2, SIMPLIFY=FALSE))
+norm.ctrl.frc3=data.frame(mapply('*', ctrl.frc3, norm.fact.ctrl.frc3, SIMPLIFY=FALSE))
+norm.ctrl.frc4=data.frame(mapply('*', ctrl.frc4, norm.fact.ctrl.frc4, SIMPLIFY=FALSE))
+norm.ctrl.frc5=data.frame(mapply('*', ctrl.frc5, norm.fact.ctrl.frc5, SIMPLIFY=FALSE))
+norm.ctrl.frc6=data.frame(mapply('*', ctrl.frc6, norm.fact.ctrl.frc6, SIMPLIFY=FALSE))
+norm.ctrl.frc7=data.frame(mapply('*', ctrl.frc7, norm.fact.ctrl.frc7, SIMPLIFY=FALSE))
+norm.ctrl.frc8=data.frame(mapply('*', ctrl.frc8, norm.fact.ctrl.frc8, SIMPLIFY=FALSE))
+norm.ctrl.frc9=data.frame(mapply('*', ctrl.frc9, norm.fact.ctrl.frc9, SIMPLIFY=FALSE))
+norm.ctrl.frc10=data.frame(mapply('*', ctrl.frc10, norm.fact.ctrl.frc10, SIMPLIFY=FALSE))
+norm.ctrl.frc11=data.frame(mapply('*', ctrl.frc11, norm.fact.ctrl.frc11, SIMPLIFY=FALSE))
+norm.ctrl.frc12=data.frame(mapply('*', ctrl.frc12, norm.fact.ctrl.frc12, SIMPLIFY=FALSE))
+norm.ctrl.frc13=data.frame(mapply('*', ctrl.frc13, norm.fact.ctrl.frc13, SIMPLIFY=FALSE))
+norm.ctrl.frc14=data.frame(mapply('*', ctrl.frc14, norm.fact.ctrl.frc14, SIMPLIFY=FALSE))
+norm.ctrl.frc15=data.frame(mapply('*', ctrl.frc15, norm.fact.ctrl.frc15, SIMPLIFY=FALSE))
+norm.ctrl.frc16=data.frame(mapply('*', ctrl.frc16, norm.fact.ctrl.frc16, SIMPLIFY=FALSE))
+norm.ctrl.frc17=data.frame(mapply('*', ctrl.frc17, norm.fact.ctrl.frc17, SIMPLIFY=FALSE))
+norm.ctrl.frc18=data.frame(mapply('*', ctrl.frc18, norm.fact.ctrl.frc18, SIMPLIFY=FALSE))
+norm.ctrl.frc19=data.frame(mapply('*', ctrl.frc19, norm.fact.ctrl.frc19, SIMPLIFY=FALSE))
+norm.ctrl.frc20=data.frame(mapply('*', ctrl.frc20, norm.fact.ctrl.frc20, SIMPLIFY=FALSE))
+norm.ctrl.frc21=data.frame(mapply('*', ctrl.frc21, norm.fact.ctrl.frc21, SIMPLIFY=FALSE))
+norm.ctrl.frc22=data.frame(mapply('*', ctrl.frc22, norm.fact.ctrl.frc22, SIMPLIFY=FALSE))
+norm.ctrl.frc23=data.frame(mapply('*', ctrl.frc23, norm.fact.ctrl.frc23, SIMPLIFY=FALSE))
+norm.ctrl.frc24=data.frame(mapply('*', ctrl.frc24, norm.fact.ctrl.frc24, SIMPLIFY=FALSE))
+norm.ctrl.frc25=data.frame(mapply('*', ctrl.frc25, norm.fact.ctrl.frc25, SIMPLIFY=FALSE))
 
-#normed values for rnase
-norm.rnase.frc1=rnase.frc1*norm.fact.rnase.frc1
-norm.rnase.frc2=rnase.frc2*norm.fact.rnase.frc2
-norm.rnase.frc3=rnase.frc3*norm.fact.rnase.frc3
-norm.rnase.frc4=rnase.frc4*norm.fact.rnase.frc4
-norm.rnase.frc5=rnase.frc5*norm.fact.rnase.frc5
-norm.rnase.frc6=rnase.frc6*norm.fact.rnase.frc6
-norm.rnase.frc7=rnase.frc7*norm.fact.rnase.frc7
-norm.rnase.frc8=rnase.frc8*norm.fact.rnase.frc8
-norm.rnase.frc9=rnase.frc9*norm.fact.rnase.frc9
-norm.rnase.frc10=rnase.frc10*norm.fact.rnase.frc10
-norm.rnase.frc11=rnase.frc11*norm.fact.rnase.frc11
-norm.rnase.frc12=rnase.frc12*norm.fact.rnase.frc12
-norm.rnase.frc13=rnase.frc13*norm.fact.rnase.frc13
-norm.rnase.frc14=rnase.frc14*norm.fact.rnase.frc14
-norm.rnase.frc15=rnase.frc15*norm.fact.rnase.frc15
-norm.rnase.frc16=rnase.frc16*norm.fact.rnase.frc16
-norm.rnase.frc17=rnase.frc17*norm.fact.rnase.frc17
-norm.rnase.frc18=rnase.frc18*norm.fact.rnase.frc18
-norm.rnase.frc19=rnase.frc19*norm.fact.rnase.frc19
-norm.rnase.frc20=rnase.frc20*norm.fact.rnase.frc20
-norm.rnase.frc21=rnase.frc21*norm.fact.rnase.frc21
-norm.rnase.frc22=rnase.frc22*norm.fact.rnase.frc22
-norm.rnase.frc23=rnase.frc23*norm.fact.rnase.frc23
-norm.rnase.frc24=rnase.frc24*norm.fact.rnase.frc24
-norm.rnase.frc25=rnase.frc25*norm.fact.rnase.frc25
-
-```
+norm.rnase.frc1=data.frame(mapply('*', rnase.frc1, norm.fact.rnase.frc1, SIMPLIFY=FALSE))
+norm.rnase.frc2=data.frame(mapply('*', rnase.frc2, norm.fact.rnase.frc2, SIMPLIFY=FALSE))
+norm.rnase.frc3=data.frame(mapply('*', rnase.frc3, norm.fact.rnase.frc3, SIMPLIFY=FALSE))
+norm.rnase.frc4=data.frame(mapply('*', rnase.frc4, norm.fact.rnase.frc4, SIMPLIFY=FALSE))
+norm.rnase.frc5=data.frame(mapply('*', rnase.frc5, norm.fact.rnase.frc5, SIMPLIFY=FALSE))
+norm.rnase.frc6=data.frame(mapply('*', rnase.frc6, norm.fact.rnase.frc6, SIMPLIFY=FALSE))
+norm.rnase.frc7=data.frame(mapply('*', rnase.frc7, norm.fact.rnase.frc7, SIMPLIFY=FALSE))
+norm.rnase.frc8=data.frame(mapply('*', rnase.frc8, norm.fact.rnase.frc8, SIMPLIFY=FALSE))
+norm.rnase.frc9=data.frame(mapply('*', rnase.frc9, norm.fact.rnase.frc9, SIMPLIFY=FALSE))
+norm.rnase.frc10=data.frame(mapply('*', rnase.frc10, norm.fact.rnase.frc10, SIMPLIFY=FALSE))
+norm.rnase.frc11=data.frame(mapply('*', rnase.frc11, norm.fact.rnase.frc11, SIMPLIFY=FALSE))
+norm.rnase.frc12=data.frame(mapply('*', rnase.frc12, norm.fact.rnase.frc12, SIMPLIFY=FALSE))
+norm.rnase.frc13=data.frame(mapply('*', rnase.frc13, norm.fact.rnase.frc13, SIMPLIFY=FALSE))
+norm.rnase.frc14=data.frame(mapply('*', rnase.frc14, norm.fact.rnase.frc14, SIMPLIFY=FALSE))
+norm.rnase.frc15=data.frame(mapply('*', rnase.frc15, norm.fact.rnase.frc15, SIMPLIFY=FALSE))
+norm.rnase.frc16=data.frame(mapply('*', rnase.frc16, norm.fact.rnase.frc16, SIMPLIFY=FALSE))
+norm.rnase.frc17=data.frame(mapply('*', rnase.frc17, norm.fact.rnase.frc17, SIMPLIFY=FALSE))
+norm.rnase.frc18=data.frame(mapply('*', rnase.frc18, norm.fact.rnase.frc18, SIMPLIFY=FALSE))
+norm.rnase.frc19=data.frame(mapply('*', rnase.frc19, norm.fact.rnase.frc19, SIMPLIFY=FALSE))
+norm.rnase.frc20=data.frame(mapply('*', rnase.frc20, norm.fact.rnase.frc20, SIMPLIFY=FALSE))
+norm.rnase.frc21=data.frame(mapply('*', rnase.frc21, norm.fact.rnase.frc21, SIMPLIFY=FALSE))
+norm.rnase.frc22=data.frame(mapply('*', rnase.frc22, norm.fact.rnase.frc22, SIMPLIFY=FALSE))
+norm.rnase.frc23=data.frame(mapply('*', rnase.frc23, norm.fact.rnase.frc23, SIMPLIFY=FALSE))
+norm.rnase.frc24=data.frame(mapply('*', rnase.frc24, norm.fact.rnase.frc24, SIMPLIFY=FALSE))
+norm.rnase.frc25=data.frame(mapply('*', rnase.frc25, norm.fact.rnase.frc25, SIMPLIFY=FALSE))
 
 
-
-
-```{r}
 #organize the different samples
 condition <- factor(rep(c("ctrl1","rnase1","ctrl2","rnase2","ctrl3","rnase3"),25))
 # define subtables for each condition
