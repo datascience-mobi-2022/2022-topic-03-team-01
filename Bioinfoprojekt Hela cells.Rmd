@@ -282,7 +282,6 @@ data.rnase3 <- data$condition =="rnase3"
 # create vectors containing norm values of fraction 1 to 25
 norm.ctrl1 <- cbind(norm.ctrl.frc1[1],norm.ctrl.frc2[1],norm.ctrl.frc3[1],norm.ctrl.frc4[1],norm.ctrl.frc5[1],norm.ctrl.frc6[1],norm.ctrl.frc7[1],norm.ctrl.frc8[1],norm.ctrl.frc9[1],norm.ctrl.frc10[1],norm.ctrl.frc11[1],norm.ctrl.frc12[1],norm.ctrl.frc13[1],norm.ctrl.frc14[1],norm.ctrl.frc15[1],norm.ctrl.frc16[1],norm.ctrl.frc17[1],norm.ctrl.frc18[1],norm.ctrl.frc19[1],norm.ctrl.frc20[1],norm.ctrl.frc21[1],norm.ctrl.frc22[1],norm.ctrl.frc23[1],norm.ctrl.frc24[1],norm.ctrl.frc25[1])
 
-
 norm.ctrl2 <- cbind(norm.ctrl.frc1[2],norm.ctrl.frc2[2],norm.ctrl.frc3[2],norm.ctrl.frc4[2],norm.ctrl.frc5[2],norm.ctrl.frc6[2],norm.ctrl.frc7[2],norm.ctrl.frc8[2],norm.ctrl.frc9[2],norm.ctrl.frc10[2],norm.ctrl.frc11[2],norm.ctrl.frc12[2],norm.ctrl.frc13[2],norm.ctrl.frc14[2],norm.ctrl.frc15[2],norm.ctrl.frc16[2],norm.ctrl.frc17[2],norm.ctrl.frc18[2],norm.ctrl.frc19[2],norm.ctrl.frc20[2],norm.ctrl.frc21[2],norm.ctrl.frc22[2],norm.ctrl.frc23[2],norm.ctrl.frc24[2],norm.ctrl.frc25[2])
 
 norm.ctrl3 <- cbind(norm.ctrl.frc1[3],norm.ctrl.frc2[3],norm.ctrl.frc3[3],norm.ctrl.frc4[3],norm.ctrl.frc5[3],norm.ctrl.frc6[3],norm.ctrl.frc7[3],norm.ctrl.frc8[3],norm.ctrl.frc9[3],norm.ctrl.frc10[3],norm.ctrl.frc11[3],norm.ctrl.frc12[3],norm.ctrl.frc13[3],norm.ctrl.frc14[3],norm.ctrl.frc15[3],norm.ctrl.frc16[3],norm.ctrl.frc17[3],norm.ctrl.frc18[3],norm.ctrl.frc19[3],norm.ctrl.frc20[3],norm.ctrl.frc21[3],norm.ctrl.frc22[3],norm.ctrl.frc23[3],norm.ctrl.frc24[3],norm.ctrl.frc25[3])
@@ -303,8 +302,6 @@ for (i in 1:nrow(datanormctrl1)) {
   x <- sum(datanormctrl1[i, ]) / 100
   datanormctrl1[i, ] = datanormctrl1[i, ] / x
 }
-
-datanormctrl1[is.na(datanormctrl1)] <- 0
 rownames(datanormctrl1)=rownames(ctrl.matrix)
 
 # normalization sample 2ctrl
@@ -314,8 +311,6 @@ for (i in 1:nrow(datanormctrl2)) {
   x <- sum(datanormctrl2[i, ]) / 100
   datanormctrl2[i, ] = datanormctrl2[i, ] / x
 }
-
-datanormctrl2[is.na(datanormctrl2)] <- 0
 rownames(datanormctrl2)=rownames(ctrl.matrix)
 
 # normalization sample 3ctrl
@@ -326,8 +321,6 @@ for (i in 1:nrow(datanormctrl3)) {
   x <- sum(datanormctrl3[i, ]) / 100
   datanormctrl3[i, ] = datanormctrl3[i, ] / x
 }
-
-datanormctrl3[is.na(datanormctrl3)] <- 0 
 rownames(datanormctrl3)=rownames(ctrl.matrix)
 
 #normalization sample 1 rnase
@@ -338,8 +331,6 @@ for (i in 1:nrow(datanormrnase1)){
   x <- sum(datanormrnase1[i, ])/ 100
   datanormrnase1[i, ] = datanormrnase1[i, ] / x
 }
-  
-datanormrnase1[is.na(datanormrnase1)] <- 0
 rownames(datanormrnase1)=rownames(rnase.matrix)
 
 #normalization sample 2 rnase
@@ -350,8 +341,6 @@ for (i in 1:nrow(datanormrnase2)) {
   x <- sum(datanormrnase2[i, ]) /100
   datanormrnase2[i, ] = datanormrnase2[i, ] / x
 }
-
-datanormrnase2[is.na(datanormctrl2)] <- 0
 rownames(datanormrnase2)=rownames(rnase.matrix)
 
 #normalization sample3 rnase
@@ -362,13 +351,12 @@ for (i in 1:nrow(datanormrnase3)) {
   x <- sum(datanormrnase3[i, ]) / 100
   datanormrnase3[i, ] = datanormrnase3[i, ] / x
 }
-
-datanormrnase3[is.na(datanormrnase3)] <- 0
 rownames(datanormrnase3)=rownames(rnase.matrix)
 
 
 # doppelte klammern bei liste 
 #r studio clear environment
+
 
 
 ##Korrelation für Reproducibility (nur für ctrl)
@@ -417,9 +405,6 @@ for (i in 1:ncol(datac1)){
 rnase23=append(rnase23, (cor(datar2[,i],datar3[,i])))
   }
 colnames(datar3)[which(ctrl23<r)]
-
-
-
 
 
 ```
