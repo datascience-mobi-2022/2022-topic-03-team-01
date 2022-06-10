@@ -359,7 +359,7 @@ rownames(datanormrnase3)=rownames(rnase.matrix)
 
 
 
-##Korrelation für Reproducibility (nur für ctrl)
+##Correlation for Reproducibility 
 datac1=t(datanormctrl1)
 datac2=t(datanormctrl2)
 datac3=t(datanormctrl3)
@@ -367,45 +367,63 @@ datar1=t(datanormrnase1)
 datar2=t(datanormrnase2)
 datar3=t(datanormrnase3)
 
-r=0.7
+#leere Vektoren erstellen 
 ctrl12=c()
-for (i in 1:ncol(datac1)){
- # if ((sd(data1[,i], na.rm=FALSE) !=0) && (sd(data2[,i], na.rm=FALSE) !=0)){
-ctrl12=append(ctrl12, (cor(datac1[,i],datac2[,i])))
-  }
-colnames(datac1)[which(ctrl12<r)]
-
 ctrl13=c()
-for (i in 1:ncol(datac1)){
-ctrl13=append(ctrl13, (cor(datac1[,i],datac3[,i])))
-  }
-colnames(datac2)[which(ctrl13<r)]
-
 ctrl23=c()
-for (i in 1:ncol(datac1)){
-ctrl23=append(ctrl23, (cor(datac2[,i],datac3[,i])))
-  }
-colnames(datac3)[which(ctrl23<r)]
-
 rnase12=c()
-for (i in 1:ncol(datac1)){
- # if ((sd(data1[,i], na.rm=FALSE) !=0) && (sd(data2[,i], na.rm=FALSE) !=0)){
-rnase12=append(rnase12, (cor(datar1[,i],datar2[,i])))
-  }
-colnames(datar1)[which(ctrl12<r)]
-
 rnase13=c()
-for (i in 1:ncol(datac1)){
-rnase13=append(rnase13, (cor(datar1[,i],datar3[,i])))
-  }
-colnames(datar2)[which(ctrl13<r)]
-
 rnase23=c()
-for (i in 1:ncol(datac1)){
-rnase23=append(rnase23, (cor(datar2[,i],datar3[,i])))
-  }
-colnames(datar3)[which(ctrl23<r)]
 
+low.cor=function(x,a,b){
+  for (i in 1:ncol(datac1)){
+    x=append(x, (cor(a[,i], b[,i])))
+  }
+   r=0.7
+   which(x<=r)
+}
+
+low.cor(ctrl12,datac1, datac2)
+low.cor(ctrl13,datac1, datac3)
+low.cor(ctrl23,datac2, datac3)
+low.cor(rnase12,datar1, datar2)
+low.cor(rnase13,datar1, datar3)
+low.cor(rnase23,datar2, datar3)
+
+#rausfinden, wie oft ein protein in ctrl bzw. rnase schlecht korreliert
+#as.data.frame(table(x)) creates a dataframe with frequence of repeating proteins 
+#if a protein does not correlate well at least two times, it will be deleted (rows stored in rmv.lox.cor.ctrl/rnase)
+#note that for ctrl and rnase the same proteins do not correlate well at least two times, still the process is conducted seperately 
+#41 proteins will be deleted in cotrol and rnase
+ctrl.low.cor=c()
+ctrl.low.cor=sort(append(ctrl.low.cor,c(low.cor(ctrl12,datac1, datac2),low.cor(ctrl13,datac1, datac3),low.cor(ctrl23,datac2, datac3))))
+
+rnase.low.cor=c()
+rnase.low.cor=sort(append(rnase.low.cor,c(low.cor(rnase12,datar1, datar2),low.cor(rnase13,datar1, datar3),low.cor(rnase23,datar2, datar3))))
+
+
+rmv.low.cor.ctrl=c()
+for ( i in 1:nrow(as.data.frame(table(ctrl.low.cor))))
+if(as.data.frame(table(ctrl.low.cor))[i,2]>1){
+  rmv.low.cor.ctrl=append(rmv.low.cor.ctrl, as.data.frame(table(ctrl.low.cor))[i,1])
+}
+
+rmv.low.cor.rnase=c()
+for ( i in 1:nrow(as.data.frame(table(rnase.low.cor))))
+if(as.data.frame(table(rnase.low.cor))[i,2]>1){
+  rmv.low.cor.rnase=append(rmv.low.cor.rnase, as.data.frame(table(rnase.low.cor))[i,1])
+}
+
+rmv.low.cor=c()
+rmv.low.cor=unique(append(rmv.low.cor,c(rmv.low.cor.ctrl,rmv.low.cor.rnase)))
+as.numeric(as.vector(rmv.low.cor))
+
+datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),]
+datanormctrl2=datanormctrl2[-as.numeric(as.vector(rmv.low.cor)),]
+datanormctrl3=datanormctrl3[-as.numeric(as.vector(rmv.low.cor)),]
+datanormrnase1=datanormrnase1[-as.numeric(as.vector(rmv.low.cor)),]
+datanormrnase2=datanormrnase2[-as.numeric(as.vector(rmv.low.cor)),]
+datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
 
 ```
 
