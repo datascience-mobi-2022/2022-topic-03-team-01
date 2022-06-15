@@ -427,3 +427,42 @@ datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
 
 ```
 
+```{r}
+#2. Finding Maxima
+#2.1 Finding position of maxima peaks
+
+# We define a function that takes a protein from our normalized dataframes and goes through each value, comparing it to m values before and m values after (m being an adjustable parameter, which allows for heightened robustness against outliers/fluctuation)
+
+#Unser Code
+find_peaks <- function(x, m=2) { #in this case m was set to m=2 to start off, but will be adjusted accordingly after first results
+  peaks_pos <- sapply(1:length(x), FUN = function(i) {
+    if (x[i] == 0) return (numeric(0))
+    lborder <- max(c(1, i-m))
+    rborder <- min(c(i+m, length(x)))
+    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0))
+                      }
+               )
+  return(unlist(peaks_pos))
+}
+
+#Function to only list those peaks above a certain threshold (in this case 3/3% since our data is normalized to 100%)
+
+find_sig_peaks <- function(x, threshold = 3) {
+        apply(x, 1, function(x) {
+          peaks <- find_peaks(x)
+          peaks <- peaks[x[peaks] > threshold]
+          unlist(peaks)
+          peaks
+             }
+        )
+}
+
+
+
+ 
+
+ 
+ 
+ #T-Test Abweichungen ausgleichen bei vielen T-tests für die einzelne Proteine
+
+```
