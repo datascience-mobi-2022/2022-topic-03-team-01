@@ -13,7 +13,7 @@ MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP
 #1.1 Split dataset into 2 datasets. One dataset consists only of Control group and the other of RNase.
 
 ctrl.matrix= cbind(MS_Table[, seq(1,150,2)])
-rnase.matrix=cbind(MS_Table[, seq(1,150,2)])
+rnase.matrix=cbind(MS_Table[, seq(2,150,2)])
 
 #1.2 Removing all zero rows
 crep1=cbind(ctrl.matrix[,seq(1,75,3)])
@@ -293,7 +293,33 @@ norm.rnase.frc13[2],norm.rnase.frc14[2],norm.rnase.frc15[2],norm.rnase.frc16[2],
 
 norm.rnase3 <- cbind(norm.rnase.frc1[3],norm.rnase.frc2[3],norm.rnase.frc3[3],norm.rnase.frc4[3],norm.rnase.frc5[3],norm.rnase.frc6[3],norm.rnase.frc7[3],norm.rnase.frc8[3],norm.rnase.frc9[3],norm.rnase.frc10[3],norm.rnase.frc11[3],norm.rnase.frc12[3],norm.rnase.frc13[3],norm.rnase.frc14[3],norm.rnase.frc15[3],norm.rnase.frc16[3],norm.rnase.frc17[3],norm.rnase.frc18[3],norm.rnase.frc19[3],norm.rnase.frc20[3],norm.rnase.frc21[3],norm.rnase.frc22[3],norm.rnase.frc23[3],norm.rnase.frc24[3],norm.rnase.frc25[3])
 
-# vorher spalten normalisieren für jedes rep damit reps dann verglichen werden können?
+#Kurve smoothen 
+
+for (j in 1:nrow(norm.ctrl1))
+  for (i in 2:24)
+   norm.ctrl1[j,i]=mean(c(norm.ctrl1[j,i-1],norm.ctrl1[j,i], norm.ctrl1[j,i+1]))
+
+for (j in 1:nrow(norm.ctrl2))
+  for (i in 2:24)
+   norm.ctrl2[j,i]=mean(c(norm.ctrl2[j,i-1],norm.ctrl2[j,i], norm.ctrl2[j,i+1]))
+
+for (j in 1:nrow(norm.ctrl3))
+  for (i in 2:24)
+   norm.ctrl3[j,i]=mean(c(norm.ctrl3[j,i-1],norm.ctrl3[j,i], norm.ctrl3[j,i+1]))
+
+for (j in 1:nrow(norm.rnase1))
+  for (i in 2:24)
+   norm.rnase1[j,i]=mean(c(norm.rnase1[j,i-1],norm.rnase1[j,i], norm.rnase1[j,i+1]))
+
+for (j in 1:nrow(norm.rnase2))
+  for (i in 2:24)
+   norm.rnase2[j,i]=mean(c(norm.rnase2[j,i-1],norm.rnase2[j,i], norm.rnase2[j,i+1]))
+
+for (j in 1:nrow(norm.rnase3))
+  for (i in 2:24)
+   norm.rnase3[j,i]=mean(c(norm.rnase3[j,i-1],norm.rnase3[j,i], norm.rnase3[j,i+1]))
+
+
 
 # normalization smaple 1ctrl
 datanormctrl1 <- as.data.frame(norm.ctrl1)
@@ -354,11 +380,6 @@ for (i in 1:nrow(datanormrnase3)) {
 rownames(datanormrnase3)=rownames(rnase.matrix)
 
 
-# doppelte klammern bei liste 
-#r studio clear environment
-
-
-
 ##Correlation for Reproducibility 
 datac1=t(datanormctrl1)
 datac2=t(datanormctrl2)
@@ -390,34 +411,14 @@ low.cor(rnase12,datar1, datar2)
 low.cor(rnase13,datar1, datar3)
 low.cor(rnase23,datar2, datar3)
 
-#rausfinden, wie oft ein protein in ctrl bzw. rnase schlecht korreliert
-#as.data.frame(table(x)) creates a dataframe with frequence of repeating proteins 
-#if a protein does not correlate well at least two times, it will be deleted (rows stored in rmv.lox.cor.ctrl/rnase)
-#note that for ctrl and rnase the same proteins do not correlate well at least two times, still the process is conducted seperately 
-#41 proteins will be deleted in cotrol and rnase
 ctrl.low.cor=c()
 ctrl.low.cor=sort(append(ctrl.low.cor,c(low.cor(ctrl12,datac1, datac2),low.cor(ctrl13,datac1, datac3),low.cor(ctrl23,datac2, datac3))))
 
 rnase.low.cor=c()
 rnase.low.cor=sort(append(rnase.low.cor,c(low.cor(rnase12,datar1, datar2),low.cor(rnase13,datar1, datar3),low.cor(rnase23,datar2, datar3))))
 
-
-rmv.low.cor.ctrl=c()
-for ( i in 1:nrow(as.data.frame(table(ctrl.low.cor))))
-if(as.data.frame(table(ctrl.low.cor))[i,2]>1){
-  rmv.low.cor.ctrl=append(rmv.low.cor.ctrl, as.data.frame(table(ctrl.low.cor))[i,1])
-}
-
-rmv.low.cor.rnase=c()
-for ( i in 1:nrow(as.data.frame(table(rnase.low.cor))))
-if(as.data.frame(table(rnase.low.cor))[i,2]>1){
-  rmv.low.cor.rnase=append(rmv.low.cor.rnase, as.data.frame(table(rnase.low.cor))[i,1])
-}
-
-rmv.low.cor=c()
-rmv.low.cor=unique(append(rmv.low.cor,c(rmv.low.cor.ctrl,rmv.low.cor.rnase)))
-as.numeric(as.vector(rmv.low.cor))
-
+rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
+#81 proteins deleted --> 4676 proteins left
 datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl2=datanormctrl2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl3=datanormctrl3[-as.numeric(as.vector(rmv.low.cor)),]
@@ -425,44 +426,20 @@ datanormrnase1=datanormrnase1[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase2=datanormrnase2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
 
+#Mean of three reps to create one dataframe for control and rnase seperately
+mean.rep.ctrl=datanormctrl1
+for (j in 1:nrow(datanormctrl1)){
+  for (i in 1:25){
+  mean.rep.ctrl[j,i]=mean(c(datanormctrl1[j,i],datanormctrl2[j,i], datanormctrl3[j,i]))
+}}
+
+mean.rep.rnase=datanormrnase1
+for (j in 1:nrow(datanormrnase1)){
+  for (i in 1:25){
+  mean.rep.rnase[j,i]=mean(c(datanormrnase1[j,i],datanormrnase2[j,i], datanormrnase3[j,i]))
+}}
+
+
+
 ```
 
-```{r}
-#2. Finding Maxima
-#2.1 Finding position of maxima peaks
-
-# We define a function that takes a protein from our normalized dataframes and goes through each value, comparing it to m values before and m values after (m being an adjustable parameter, which allows for heightened robustness against outliers/fluctuation)
-
-#Unser Code
-find_peaks <- function(x, m=2) { #in this case m was set to m=2 to start off, but will be adjusted accordingly after first results
-  peaks_pos <- sapply(1:length(x), FUN = function(i) {
-    if (x[i] == 0) return (numeric(0))
-    lborder <- max(c(1, i-m))
-    rborder <- min(c(i+m, length(x)))
-    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0))
-                      }
-               )
-  return(unlist(peaks_pos))
-}
-
-#Function to only list those peaks above a certain threshold (in this case 3/3% since our data is normalized to 100%)
-
-find_sig_peaks <- function(x, threshold = 3) {
-        apply(x, 1, function(x) {
-          peaks <- find_peaks(x)
-          peaks <- peaks[x[peaks] > threshold]
-          unlist(peaks)
-          peaks
-             }
-        )
-}
-
-
-
- 
-
- 
- 
- #T-Test Abweichungen ausgleichen bei vielen T-tests für die einzelne Proteine
-
-```
