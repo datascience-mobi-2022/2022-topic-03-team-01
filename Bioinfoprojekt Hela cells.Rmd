@@ -395,7 +395,20 @@ datar1=t(datanormrnase1)
 datar2=t(datanormrnase2)
 datar3=t(datanormrnase3)
 
+<<<<<<< Updated upstream
 
+=======
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+#leere Vektoren erstellen 
+=======
+#klappt nur für protein 1-4000. danach anscheinend std =0 -> intervall nach hinten schieben, evt ohne transponieren
+r=0.7
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> 3d6e61819e74ff2a4c993adc64d3c2b2a8aab65e
+>>>>>>> Stashed changes
 ctrl12=c()
 ctrl13=c()
 ctrl23=c()
@@ -424,8 +437,41 @@ ctrl.low.cor=sort(append(ctrl.low.cor,c(low.cor(ctrl12,datac1, datac2),low.cor(c
 rnase.low.cor=c()
 rnase.low.cor=sort(append(rnase.low.cor,c(low.cor(rnase12,datar1, datar2),low.cor(rnase13,datar1, datar3),low.cor(rnase23,datar2, datar3))))
 
+<<<<<<< Updated upstream
 rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
 #81 proteins deleted --> 4676 proteins left
+=======
+<<<<<<< HEAD
+
+rmv.low.cor.ctrl=c()
+for ( i in 1:nrow(as.data.frame(table(ctrl.low.cor))))
+if(as.data.frame(table(ctrl.low.cor))[i,2]>1){
+  rmv.low.cor.ctrl=append(rmv.low.cor.ctrl, as.data.frame(table(ctrl.low.cor))[i,1])
+}
+
+rmv.low.cor.rnase=c()
+for ( i in 1:nrow(as.data.frame(table(rnase.low.cor))))
+if(as.data.frame(table(rnase.low.cor))[i,2]>1){
+  rmv.low.cor.rnase=append(rmv.low.cor.rnase, as.data.frame(table(rnase.low.cor))[i,1])
+}
+
+<<<<<<< Updated upstream
+rmv.low.cor=c()
+rmv.low.cor=unique(append(rmv.low.cor,c(rmv.low.cor.ctrl,rmv.low.cor.rnase)))
+as.numeric(as.vector(rmv.low.cor))
+=======
+# wie viele punkte einbeziehen
+#erster und letzter wert 
+# diff(sign(diff)) ??
+# wie unterscheiden global vs lokal 
+# wie maxima? gröster wert oder größter peak 
+>>>>>>> Stashed changes
+
+=======
+rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
+#81 proteins deleted --> 4676 proteins left
+>>>>>>> 3d6e61819e74ff2a4c993adc64d3c2b2a8aab65e
+>>>>>>> Stashed changes
 datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl2=datanormctrl2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl3=datanormctrl3[-as.numeric(as.vector(rmv.low.cor)),]
@@ -433,6 +479,42 @@ datanormrnase1=datanormrnase1[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase2=datanormrnase2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+# erster skalierungsschritt wichtig! selbe proteingesamtmenge pro versuch, keine verhältnisse einbeziehen!!
+# für jede franktion summe der 3 reps gleich?
+```
+
+```{r}
+#findpeaks(datanormctrl1,ignore_threshold = 0, span = 3, strict = TRUE, na.rm = FALSE)
+#pracma package?
+
+find_peaks <- function (x, m = 2){
+    shape <- diff(sign(diff(x, na.pad = FALSE)))
+    pks <- sapply(which(shape < 0), FUN = function(i){
+       z <- i - m + 1
+       z <- ifelse(z > 0, z, 1)
+       w <- i + m + 1
+       w <- ifelse(w < length(x), w, length(x))
+       if(all(x[c(z : i, (i + 2) : w)] <= x[i + 1])) return(i + 1) else return(numeric(0))
+     })
+   pks <- unlist(pks)
+   
+   if ( sum(x[1]>x[2:(m+1)]) == 2 ) {pks <- c(pks, 1)} 
+     if ( sum(x[25]>x[24:(25-m)]) == 2 ) {pks <- c(pks, 25)}
+     pks <- unlist(pks)
+     pks
+}
+
+ctrl_norm_mean$maxima <- apply(datanormctrl1, 1, function(x) {
+															   list <- find_peaks(x)
+															   list <- list[x[list] > 2] 
+															   list <- unlist(list)
+															   list
+															   })
+=======
+>>>>>>> Stashed changes
 #Mean of three reps to create one dataframe for control and rnase seperately
 mean.rep.ctrl=datanormctrl1
 for (j in 1:nrow(datanormctrl1)){
@@ -448,5 +530,9 @@ for (j in 1:nrow(datanormrnase1)){
 
 
 
+<<<<<<< Updated upstream
+=======
+>>>>>>> 3d6e61819e74ff2a4c993adc64d3c2b2a8aab65e
+>>>>>>> Stashed changes
 ```
 
