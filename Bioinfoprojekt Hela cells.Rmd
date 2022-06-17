@@ -15,6 +15,7 @@ MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP
 ctrl.matrix= cbind(MS_Table[, seq(1,150,2)])
 rnase.matrix=cbind(MS_Table[, seq(2,150,2)])
 
+
 #1.2 Removing all zero rows
 crep1=cbind(ctrl.matrix[,seq(1,75,3)])
 crep2=cbind(ctrl.matrix[,seq(2,75,3)])
@@ -328,6 +329,7 @@ for (i in 1:nrow(datanormctrl1)) {
   x <- sum(datanormctrl1[i, ]) / 100
   datanormctrl1[i, ] = datanormctrl1[i, ] / x
 }
+
 rownames(datanormctrl1)=rownames(ctrl.matrix)
 
 # normalization sample 2ctrl
@@ -337,6 +339,7 @@ for (i in 1:nrow(datanormctrl2)) {
   x <- sum(datanormctrl2[i, ]) / 100
   datanormctrl2[i, ] = datanormctrl2[i, ] / x
 }
+
 rownames(datanormctrl2)=rownames(ctrl.matrix)
 
 # normalization sample 3ctrl
@@ -347,6 +350,7 @@ for (i in 1:nrow(datanormctrl3)) {
   x <- sum(datanormctrl3[i, ]) / 100
   datanormctrl3[i, ] = datanormctrl3[i, ] / x
 }
+
 rownames(datanormctrl3)=rownames(ctrl.matrix)
 
 #normalization sample 1 rnase
@@ -357,6 +361,7 @@ for (i in 1:nrow(datanormrnase1)){
   x <- sum(datanormrnase1[i, ])/ 100
   datanormrnase1[i, ] = datanormrnase1[i, ] / x
 }
+
 rownames(datanormrnase1)=rownames(rnase.matrix)
 
 #normalization sample 2 rnase
@@ -367,6 +372,7 @@ for (i in 1:nrow(datanormrnase2)) {
   x <- sum(datanormrnase2[i, ]) /100
   datanormrnase2[i, ] = datanormrnase2[i, ] / x
 }
+
 rownames(datanormrnase2)=rownames(rnase.matrix)
 
 #normalization sample3 rnase
@@ -377,6 +383,7 @@ for (i in 1:nrow(datanormrnase3)) {
   x <- sum(datanormrnase3[i, ]) / 100
   datanormrnase3[i, ] = datanormrnase3[i, ] / x
 }
+
 rownames(datanormrnase3)=rownames(rnase.matrix)
 
 
@@ -388,7 +395,7 @@ datar1=t(datanormrnase1)
 datar2=t(datanormrnase2)
 datar3=t(datanormrnase3)
 
-#leere Vektoren erstellen 
+
 ctrl12=c()
 ctrl13=c()
 ctrl23=c()
