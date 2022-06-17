@@ -443,3 +443,46 @@ for (j in 1:nrow(datanormrnase1)){
 
 ```
 
+```{r}
+#2. Finding Maxima
+#2.1 Finding position of maxima peaks
+
+# We define a function that takes a protein from our normalized dataframes and goes through each value, comparing it to m values before and m values after (m being an adjustable parameter, which allows for heightened robustness against outliers/fluctuation)
+
+#Unser Code
+find_peaks <- function(x, m=2) { #in this case m was set to m=2 to start off, but will be adjusted accordingly after first results
+  peaks_pos <- sapply(1:length(x), FUN = function(i) {
+    if (x[i] == 0) return (numeric(0))
+    lborder <- max(c(1, i-m))
+    rborder <- min(c(i+m, length(x)))
+    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0))
+                      }
+               )
+  return(unlist(peaks_pos))
+}
+
+#Function to only list those peaks above a certain threshold (in this case 3/3% since our data is normalized to 100%)
+
+find_sig_peaks <- function(x, threshold = 3) {
+        apply(x, 1, function(x) {
+          peaks <- find_peaks(x)
+          peaks <- peaks[x[peaks] > threshold]
+          unlist(peaks)
+          peaks
+             }
+        )
+}
+
+#If one of the vectors of either Control or RNase has a row with multiple values, it should compare the amount of the proteins in said positions and pick the position with the highest protein amount
+
+if(x[,length(x) > 1]) return(max(x[i]))
+
+View(find_sig_peaks(datanormctrl1, threshold = 3))
+View(find_sig_peaks(datanormrnase1, threshold = 3))
+
+datanormctrl1["AT2A3_HUMAN",]
+datanormrnase1["AT2A3_HUMAN",]
+ 
+ #T-Test Abweichungen ausgleichen bei vielen T-tests für die einzelne Proteine
+
+```
