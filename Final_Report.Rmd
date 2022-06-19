@@ -63,7 +63,7 @@ barplot(rnase.sums, xlab="RNase samples of normalized and unnormalized data", yl
 
 ```
  
-b) Fractionwise Normalization - Scaling
+b) Fraction-wise Normalization - Scaling
 
 ##3.2 Reproducibility
 The three reps for control and RNAse group were adjusted during normalization. Nontheless, it is possible that they differ too much in order to be used in further analysis. Therefore we examined the reproducibility of the reps with correlation. First the normalized data was transformed so that the columns consist of proteins and rows of the different protein amounts in each fraction. We created the function *low.cor* that first calculates the pearson correlation over all fractions of each protein of two reps. It returns only the column numbers of proteins which reps have a correlation coefficient beneath 0.7. By applying *low.cor* six times (rep1 & rep2, rep1 & rep3, rep2 & rep3 for control and RNase) we could create a dataframe that contains only proteins with low correlation and includes how often a protein did not correlate well. 
