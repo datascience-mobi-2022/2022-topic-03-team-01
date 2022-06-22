@@ -554,5 +554,70 @@ dgfffb <- for (i in 1:nrow(shift)) {
 
 # cbind to creeate new coloumn for shift information
 
+#4656 proteins left 
+peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3) 
+peaks.rnase = find_sig_peaks(mean.rep.rnase, threshold = 3)
+peak.ctrl1= find_sig_peaks(datanormctrl1, threshold=3)
+peak.ctrl2= find_sig_peaks(datanormctrl2, threshold=3)
+peak.ctrl3= find_sig_peaks(datanormctrl3, threshold=3)
+peak.rnase1= find_sig_peaks(datanormrnase1, threshold=3)
+peak.rnase2= find_sig_peaks(datanormrnase2, threshold=3)
+peak.rnase3= find_sig_peaks(datanormrnase3, threshold=3)
+
+peaks.ctrl.mtrx <- unlist(as.matrix(peaks.ctrl))
+peaks.rnase.mtrx <- unlist(as.matrix(peaks.rnase))
+peaks.ctrl1.mtrx = unlist(as.matrix(peak.ctrl1))
+peaks.ctrl2.mtrx = unlist(as.matrix(peak.ctrl2))
+peaks.ctrl3.mtrx = unlist(as.matrix(peak.ctrl3))
+peaks.rnase1.mtrx = unlist(as.matrix(peak.rnase1))
+peaks.rnase2.mtrx = unlist(as.matrix(peak.rnase2))
+peaks.rnase3.mtrx = unlist(as.matrix(peak.rnase3))
+
+peaks.mtrx=cbind(peaks.ctrl1.mtrx, peaks.ctrl2.mtrx, peaks.ctrl3.mtrx, peaks.rnase1.mtrx, peaks.rnase2.mtrx, peaks.rnase3.mtrx)
+
+shift.mean=peaks.ctrl.mtrx-peaks.rnase.mtrx
+shift.mtrx1=peaks.ctrl1.mtrx-peaks.rnase1.mtrx
+shift.mtrx2=peaks.ctrl2.mtrx-peaks.rnase2.mtrx
+shift.mtrx3=peaks.ctrl3.mtrx-peaks.rnase3.mtrx
+
+# cbind to creeate new coloumn for shift information
+color=c()
+peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)
+for ( i in 1:nrow(peaks.allg)){
+  if (peaks.allg[i,3]>0){
+    color=append(color,c("green"))
+  }else if (peaks.allg[i,3]<0){
+    color=append(color,c("pink"))
+  }else{
+    color=append(color, c("blue"))
+  }
+}
+peaks.allg=cbind(peaks.allg, color)
+#k-means 
+g=cbind(peaks.ctrl.mtrx,peaks.rnase.mtrx)
+clus=kmeans(g, 3)
+fviz_cluster(clus,g, xlab=TRUE, ylab=TRUE, geom="point")
+shift.mean["MIEN1_HUMAN",]
+shift.mean["TEN1_HUMAN",]
+peaks.ctrl.mtrx["ZN622_HUMAN",]
+peaks.rnase.mtrx["ZN622_HUMAN",]
+#selber geplottet 
+#in Report: wenige punkte, weil proteine aufeinander sind, suche Bsp.
+plot.new()
+plot(peaks.allg[,1],peaks.allg[,2], type="p", lwd=1, col=color, pch=19)
+abline(coef=c(0,1), col="red")
+
+
+
+x=c(8,9,10)
+y=c(1,2,3)
+plot(gub[,1],gub[,2], col=gub$col)
+col=c("green", "blue", "red")
+gub=data.frame(x, y, col)
+
+#t-tests
+t.test(peaks.mtrx[10,1:3],peaks.mtrx[10,4:6], paired=TRUE, alternative="two.sided")
+
+
 ```
 
