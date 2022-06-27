@@ -41,11 +41,14 @@ First we split our dataset into two dataframes containing only the control and R
 Goal of the normalization is to make the three different reps more similar by applying statistical and mathematical functions.
 
 a) Repwise Normalization 
+
 ![**Steps of Normalization.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization.png)
+
 For simpler calculation we created subtables seperately for control and RNase containing only one fraction with all three reps (for both control and RNase group 50 subtables were created). For every subtable the mean over all the proteins for every rep from one fraction was calculated, creating 3 mean values in for each of the 50 subtables. 
 The function *smallest diff* was created to find the two reps for every individual fraction with the smallest difference of their mean values. The mean value of these two reps over all the proteins from one fraction was determined. The normalization factors for every fraction for each rep was calculated by dividing the mean from the most similar two reps by the individual means of one fraction for each rep (for each of the 50 subtables containing one fraction with three reps, three normalization factors were determined). By multiplying all the values of one fraction of one rep with its individual normalization factor, we received the normalized values for all reps and for both control and RNase group.
 When comparing the unnormed values with the normalized values by summing up all the proteins of all fraction for each rap, it is noticably how the reps have been statistically adjusted. 
 ![**Barplot before and after Normalization of Control.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_ctrl.png)
+
 ![**Barplot before and after Normalization of RNAse.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_rnase.png)
 
 b) Fraction-wise Normalization - Scaling
