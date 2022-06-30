@@ -69,7 +69,13 @@ This step would be essential before fitting the curve to a Gaussian curve for ce
 ## 4.2 Identification of global Maxima
 
 
-## 4.3 Gauss fitting to the Curve
+## 5.1 Clustering with K-means 
+K-means clustering can be used to identify clusters in a data set. In our project we can use it to identify proteins with similar characteristics in their shifts between control and RNase. When using k-means one can set the number of clusters (k). We chose different cluster amounts from two to six. 
+To determine which amount of clusters is the best, we used the silhouette and elbow method. The silhouette method calculates the distance of every point to its own and the neighbouring cluster (smallest distance of point i to a point that is not a member of its own cluster). Every point of then abtains a silhouette value between -1 and 1. 1 meaning that the point fits perfectly into its cluster and -1 meaning that it would be more appropriate to place it in a neighbouring cluster. By changing the amounts of clusters, the overall mean of the silhouette value of all points change. The higher this mean is, the more accurate the clustering works. 
+The elbow method calculates the Within-Cluster Sum of Squared Errors (WSS) and for different values of k. You have to chose the k for which the WSS first starts to diminish.
+For our proteins the highest mean silhouette value is 0.5255658 for k=5.
+
+![**K-means elbow plot .**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Kmeans_elbow.png)
 
 
 
