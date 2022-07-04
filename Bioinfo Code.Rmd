@@ -665,6 +665,9 @@ for (i in 1:length(sigproteins)){
 
 #k-means and testing with silhouette plot
 #clustering with 2 clusters
+
+mtrx.kmeans=cbind(peaks.ctrl.mtrx,peaks.rnase.mtrx)
+
 clus2=kmeans(mtrx.kmeans, 2)
 fviz_cluster(clus2,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
 sil2=fviz_silhouette(silhouette(clus2$cluster, dist(mtrx.kmeans)))
@@ -747,7 +750,7 @@ t.mean.rep.rnase=t(mean.rep.rnase)
     corlm=append(corlm, (cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i])))
   }
 
-lm.data=data.frame(shift.mean[1:(0.9*ncol(t.mean.rep.ctrl))],corlm)
+lm.data=data.frame(abs(shift.mean[1:(0.9*ncol(t.mean.rep.ctrl))]),corlm)
 colnames(lm.data)=c("Shift", "Corr")
 
 model=lm(Shift ~ Corr, data=lm.data)
