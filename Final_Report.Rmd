@@ -59,15 +59,37 @@ The three reps for control and RNAse group were adjusted during normalization. N
 Proteins that have a low correlation coefficient two or three times (three times meaning that no rep correlates well) are deleted.
 
 ## 3.3 Smoothing the Curve
-To smoothen the curve, we created to for loops. The first loop goes through each row so that the second for loop is applied to each protein. The second loop takes fraction i and calculates the mean of fraction i, i-1 and i+1. This mean will then replace the original value of the protein amount in fraction i. Since there is no fraction before fraction 1 and no fraction after fraction 25, the second loop is only applied to fraction 2-24 for every protein of each rep. 
+To smoothen the curve, we created two for loops. The first loop goes through each row so that the second for loop is applied to each protein. The second loop takes fraction i and calculates the mean of fraction i, i-1 and i+1. This mean will then replace the original value of the protein amount in fraction i. Since there is no fraction before fraction 1 and no fraction after fraction 25, the second loop is only applied to fraction 2-24 for every protein of each rep. 
+We will still have 6 vectors containing every protein and its 25 fractions, but these values will now be more similar to its neighboring values due to the smoothing method we have applied.
 This step would be essential before fitting the curve to a Gaussian curve for certain proteins. In Figure 3 and 4 the result of smoothing can be seen for the protein AHNK_HUMAN. Individual fractions are corrected and the curve looks more familiar to the Gaussian curve.
 ![**AHNK_HUMAN before Smoothing.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/before_smoothing.png)
 ![**AHNK_HUMAN after Smoothing.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/after_smoothing.png)
 
 # 4. Maxima  
+The relevance of the maxima for the definition of a Protein as one that binds to RNA lies in the premise, that the peaks of protein seen in a certain fraction within our control group will then have a peak shift once the same mass spectrometry has been performed in the presence of RNase. Thus, it is essential that we are able to find the maxima of each and every single protein, so that we can later on compare these values.
+
+## 4.1 Identification of global Maxima
+With our now smoothened data, we can now create a function that defines our maxima and apply it, with the goal of creating a new dataframe consisting of just the fractions where the global maxima for control and RNase can be found. 
+
+We defined a function that takes a protein from our normalized dataframes and goes through each fraction, comparing the protein amount in it to a m-number of values before and m-number of values after the to be determined fraction (m being an adjustable parameter, which allows for heightened robustness against outliers and fluctuation).
+
+```{r Definition of the peak-finding function, include = TRUE}
+
+find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our first run we mainly want to observe the global maxima of each protein
+  peaks_pos <- sapply(1:length(x), FUN = function(i) { #In "peaks_pos" all values are saved of positions where the function has found a peak in, while iterating over all fractions of all proteins
+    if (x[i] == 0) return (numeric(0)) #If any value found is equal to 0, then said value will be returned as an empty one
+    lborder <- max(c(1, i-m)) #This part of the function makes sure, we stay within our borders. While the function is iterating through the values it, it will do so and either return the value of the position it finds itself at or, in the most extreme of cases, return the value "1"
+    rborder <- min(c(i+m, length(x))) #Similarly to the lborder, rborder makes sure we stay within our borders, but on the other extreme (length(x) = 25)
+    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0)) #This part of the function will return the position of a maxima, in the case that when comparing its neighboring values of lborder and rborder, the maxima "i" is great or equal; if not, it will return an empty value and continue with the next position
+                      }
+               )
+  return(unlist(peaks_pos)) #Finally, we return the unlisted list of "peaks_pos"
+}
+
+```
+## 4.2 Finding signifcant peaks
 
 
-## 4.2 Identification of global Maxima
 
 
 ## 5.1 Clustering with K-means 
