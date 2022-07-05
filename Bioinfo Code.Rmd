@@ -7,6 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ```{r}
+library(ggplot2)
+library(ggpubr)
+library(factoextra)
+library(cluster)
+
+
 MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
 
 #1. Clean Up and Normalization
@@ -580,7 +586,19 @@ shift.mtrx1=peaks.ctrl1.mtrx-peaks.rnase1.mtrx
 shift.mtrx2=peaks.ctrl2.mtrx-peaks.rnase2.mtrx
 shift.mtrx3=peaks.ctrl3.mtrx-peaks.rnase3.mtrx
 
-# cbind to creeate new coloumn for shift information
+#Identify RNA-dependent proteins by creating matrix with only proteins with a left shift -> negative values in shift.mean
+#matrix should include the original row names of the RDPs
+rnames=rownames(shift.mean)
+RDP.name=c()
+RDP.pos=c()
+for (i in 1:nrow(shift.mean)){
+if(shift.mean[i]<0){
+  RDP.name=append(RDP.name,rnames[i])
+  RDP.pos=append(RDP.pos, i)
+}}
+RDP.matrix=cbind(RDP.name, RDP.pos) #
+
+# cbind to create new coloumn for shift information
 color=c()
 peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)
 for ( i in 1:nrow(peaks.allg)){
@@ -608,16 +626,145 @@ plot(peaks.allg[,1],peaks.allg[,2], type="p", lwd=1, col=color, pch=19)
 abline(coef=c(0,1), col="red")
 
 
-
-x=c(8,9,10)
-y=c(1,2,3)
-plot(gub[,1],gub[,2], col=gub$col)
-col=c("green", "blue", "red")
-gub=data.frame(x, y, col)
-
 #t-tests
-t.test(peaks.mtrx[10,1:3],peaks.mtrx[10,4:6], paired=TRUE, alternative="two.sided")
+pval <- c()
+sigproteins <- c()
 
+for (i in 1:nrow(peaks.mtrx)) {
+  ctrl.vec1 <- datanormctrl1[i, peaks.mtrx[i,1]]
+  ctrl.vec2 <- datanormctrl2[i, peaks.mtrx[i,2]]
+  ctrl.vec3 <- datanormctrl3[i, peaks.mtrx[i,3]]
+  ctrl.vec <- c(ctrl.vec1, ctrl.vec2, ctrl.vec3)
+  
+  rnase.vec1 <- datanormrnase1[i, peaks.mtrx[i,1]]
+  rnase.vec2 <- datanormrnase2[i, peaks.mtrx[i,2]]
+  rnase.vec3 <- datanormrnase3[i, peaks.mtrx[i,3]]
+  rnase.vec <- c(rnase.vec1, rnase.vec2, rnase.vec3)
+    #test <- wilcox.test(ctrl.vec, rnase.vec, paired=TRUE, exact=TRUE, alternative = "two.sided")
+ # pval <- append(pval, test$p.value)
+  if  ((ctrl.vec[1] == ctrl.vec[2]) | (ctrl.vec[2] == ctrl.vec[3]) | (rnase.vec[1] == rnase.vec[2]) |        (rnase.vec[2] == rnase.vec[3]) | ctrl.vec[1] == rnase.vec[1]){
+    pval <- append(pval,1)
+  } else {ttest <- t.test(ctrl.vec, rnase.vec)
+  pval <- append(pval, ttest$p.value)}
+}
+
+pval.adj=p.adjust(pval, method = "BH", n = length(pval))
+for (i in 1:length(pval.adj)){
+  if (pval.adj[i] < 0.05) {
+    sigproteins <- append(sigproteins, rnames[i]) #length(sigproteins)=1921
+  } }
+
+#find similar proteins between sigproteins and RDP.matrix. sigproteins contains also right-shifted proteins that are not RDPs, those will be eliminated. Also only RDPs with a significant shift will be chosen.
+sig.RDP=c()
+for (i in 1:length(sigproteins)){
+  for (j in 1:nrow(RDP.matrix)){
+    if(sigproteins[i]==RDP.matrix[j,1]){
+      sig.RDP=append(sig.RDP,RDP.matrix[j])   #length(similar.ttest)=401
+    }}}
+
+
+#k-means and testing with silhouette plot
+#clustering with 2 clusters
+
+mtrx.kmeans=cbind(peaks.ctrl.mtrx,peaks.rnase.mtrx)
+
+clus2=kmeans(mtrx.kmeans, 2)
+fviz_cluster(clus2,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
+sil2=fviz_silhouette(silhouette(clus2$cluster, dist(mtrx.kmeans)))
+sil2 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus2$cluster, .)
+sil2.data <- data.frame(cluster = factor(sil2[, 1]), sil_width = sil2[, 3])
+mean.sil2.width=mean(sil2.data$sil_width)
+
+#clustering with 3 clusters
+clus3=kmeans(mtrx.kmeans, 3)
+fviz_cluster(clus3,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
+fviz_silhouette(silhouette(clus3$cluster, dist(mtrx.kmeans)))
+sil3=fviz_silhouette(silhouette(clus3$cluster, dist(mtrx.kmeans)))
+sil3 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus3$cluster, .)
+sil3.data <- data.frame(cluster = factor(sil3[, 1]), sil_width = sil3[, 3])
+mean.sil3.width=mean(sil3.data$sil_width)
+
+#clustering with 4 clusters 
+clus4=kmeans(mtrx.kmeans, 4)
+fviz_cluster(clus4,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
+fviz_silhouette(silhouette(clus4$cluster, dist(mtrx.kmeans)))
+sil4=fviz_silhouette(silhouette(clus4$cluster, dist(mtrx.kmeans)))
+sil4 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus4$cluster, .)
+sil4.data <- data.frame(cluster = factor(sil4[, 1]), sil_width = sil4[, 3])
+mean.sil4.width=mean(sil4.data$sil_width)
+
+#clustering with 5 clusters 
+clus5=kmeans(mtrx.kmeans, 5)
+fviz_cluster(clus5,mtrx.kmeans,xlab="Max Control",ylab="Max RNase", geom="point")
+fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
+sil5=fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
+sil5 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus5$cluster, .)
+sil5.data <- data.frame(cluster = factor(sil5[, 1]), sil_width = sil5[, 3])
+mean.sil5.width=mean(sil5.data$sil_width)
+
+#clustering with 6 clusters
+clus6=kmeans(mtrx.kmeans, 6)
+fviz_cluster(clus6,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
+fviz_silhouette(silhouette(clus6$cluster, dist(mtrx.kmeans)))
+sil6=fviz_silhouette(silhouette(clus6$cluster, dist(mtrx.kmeans)))
+sil6 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus6$cluster, .)
+sil6.data <- data.frame(cluster = factor(sil6[, 1]), sil_width = sil6[, 3])
+mean.sil6.width=mean(sil6.data$sil_width)
+
+#elbow-plot
+k.max <- 15
+data <- mtrx.kmeans
+wss <- sapply(1:k.max, 
+              function(k){kmeans(data,k, nstart=50,iter.max = 15 )$tot.withinss})
+wss
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of Clusters k",
+     ylab="Total Within-Clusters Sum of Squares", col="blue")
+
+#selber geplottet 
+#in Report: wenige punkte, weil proteine aufeinander sind, suche Bsp.
+color=c()
+peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)
+for ( i in 1:nrow(peaks.allg)){
+  if (peaks.allg[i,3]>0){
+    color=append(color,c("green"))
+  }else if (peaks.allg[i,3]<0){
+    color=append(color,c("pink"))
+  }else{
+    color=append(color, c("blue"))
+  }
+}
+peaks.allg=cbind(peaks.allg, color)
+plot.new()
+plot(peaks.allg[,1],peaks.allg[,2], type="p", lwd=1, col=color, pch=19)
+abline(coef=c(0,1), col="red")
+
+#Linear Regression 
+#model with protein 1-4190 (90%)
+corlm=c()
+t.mean.rep.ctrl=t(mean.rep.ctrl)
+t.mean.rep.rnase=t(mean.rep.rnase)
+
+  for (i in 1:(0.9*ncol(t.mean.rep.ctrl))){
+    corlm=append(corlm, (cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i])))
+  }
+
+lm.data=data.frame(abs(shift.mean[1:(0.9*ncol(t.mean.rep.ctrl))]),corlm)
+colnames(lm.data)=c("Shift", "Corr")
+
+model=lm(Shift ~ Corr, data=lm.data)
+summary(model)
+model$coefficients
+cor.model=model$coefficients[2]*est.shift + model$coefficients[1]
+
+#try how the model works for the last 10% 
+
+cor.model=c()
+for (i in (0.9*ncol(t.mean.rep.ctrl)):ncol(t.mean.rep.ctrl)){
+cor.model=append(cor.model, cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i]))
+}
+est.shift=(cor.model-model$coefficients[1])/model$coefficients[2]
 
 ```
 
