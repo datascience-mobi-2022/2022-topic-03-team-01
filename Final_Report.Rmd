@@ -3,8 +3,8 @@ title: "Proteome-wide Screen for RNA-dependent Proteins in Non-Synchronized HeLa
 author: "Alisa Kirkin, Sina Kühnel, Ignacio Lozano Onrubia, Greta Pick"
 date: "19/07/2022"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Final Report
 
-Idee: vielleicht keine 1-bla Nummerierung, sondern Aufteilung in Phase 1-5 und dann Unterpunkte mit Header2
 
 # 1. Introduction
 
@@ -24,16 +23,32 @@ All of them include RNA-binding proteins. RNA-binding proteins (RBP) are protein
 ## 1.1 Summary of experiment
 To identify RDPs a proteom-wide screen was conducted with mass-spectometry. HeLa S3 cels in different cell cycle stages were lysed (Fig. 1). The cell lysate was split into a control and an RNase gropup. The RNase group was treated with RNase which causes the degradation of RNase. RBPs can no longer bind to RNA and RBP-binding proteins to RBPs. The control group did not receive any further treatment and therefore all RNA and RDPs interact. The cell lysate was transferred onto a sucrose density gradient. After ultra centrifugation the RNA-protein complexes or proteins alone will end up in one of 25 fractions depending on their molecular weight. A heavy RNA-protein complex will travel further and land in a higher fraction than a single protein from the RNase treatment. This would create a left shift and is expected to happen for RDPs.
 
-![** Generation of Data.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Experiment.png)
+![Generation of Data.](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Experiment.png)
 
 ## 1.2 Goals
 The main goal is to automatically identify RDPs on the basis of the fraction shift between control and RNase treatment. 
 
-# 2. Description of the Dataset
+# 2. Materials and Methods
+
+## 2.1 Description of the Dataset
 The dataset consists of 4765 rows which represent different proteins and 150 columns. Those include 3 replica for each of the 25 fractions for control and RNase treatment (3 x 25 x 2 = 150 columns). For every protein the protein amount in a certain fraction is given in arbitrary units.
 
+## 2.2 T-tests
 
-# 3. Data Clean Up and Normalization 
+## 2.3 K-means
+K-means is a method for clustering that aims to structure *n* observations into *k* clusters. Each observation *n* is assigned to the cluster with the smallest eucledian distance to the clusters centroid. After the initial cluster is assigned to each observation, new centroids are set up to have the smallest distance to all its observations. To quantify which amouns of clusters *k* is the best the silhouette or elbow method can be used ^[2].
+The silhouette method calculates the distance of every point to its own and the neighbouring cluster (smallest distance of point i to a point that is not a member of its own cluster). Every point obtains a silhouette value between -1 and 1. 1 meaning that the observation fits perfectly into its cluster and -1 meaning that it would be more appropriate to place it in a neighbouring cluster. By changing the amounts of clusters, the overall mean of the silhouette value of all points change. The higher this mean is, the more accurate the clustering works ^[3]. 
+The elbow method calculates the Within-Cluster Sum of Squared Errors (WSS) for different values of k. When plotting the WSS against the amount of clusters *k* a declining curve is produced. By choosing the *k* for which the WSS first starts to diminish you receive the optimal amount of clusters .
+
+
+## 2.4 Linear Regression
+Linear regression is a method to model the linear relashionship between a scalar and an explanatory variable. When there is more than one scalar variable the process is called multiple linear regression. The relationship is modeled using a linear predictor function "the line of best fit". Therefore the explanatory variable can be estimated by using only existing parameters. The parameters of the regression line are estimated using the least-square method to minimize the sum of squares of the deviations. Since the estimated value and the real value do not generally coincide their difference is called residuals. The correlation between the estimated parameter and the residuals should be close to zero. The residuals should also have a mean value of zero and be normally distributed.
+To determine the quality of a linear model the F-test is applied. The F-test is a statistical test that compares the lineat model with test statistic that has an F-distribution under the null-hypothesis. The null model uses the equation *Y = b<sub></sub>* with *b<sub>0</sub> = mean(Y)*. While the full model uses the determined parameters *Y = b<sub>0</sub> + b<sub>1</sub>X* for a simple linear regression ^[4].
+
+
+# 3. Results
+
+# 3.1 Data Clean Up and Normalization 
 Clean Up of the raw data is needed for the following analysis. 
 First we split our dataset into two dataframes containing only the control and RNase group. Those were split further into three subtables representing the three reps. A protein was deleted from control and RNase when it had no counts in at least one rep. Eight proteins were deleted, becuase they had at least one all zero row in one rep.
 
@@ -47,9 +62,11 @@ a) Repwise Normalization
 For simpler calculation we created subtables seperately for control and RNase containing only one fraction with all three reps (for both control and RNase group 50 subtables were created). For every subtable the mean over all the proteins for every rep from one fraction was calculated, creating 3 mean values in for each of the 50 subtables. 
 The function *smallest diff* was created to find the two reps for every individual fraction with the smallest difference of their mean values. The mean value of these two reps over all the proteins from one fraction was determined. The normalization factors for every fraction for each rep was calculated by dividing the mean from the most similar two reps by the individual means of one fraction for each rep (for each of the 50 subtables containing one fraction with three reps, three normalization factors were determined). By multiplying all the values of one fraction of one rep with its individual normalization factor, we received the normalized values for all reps and for both control and RNase group.
 When comparing the unnormed values with the normalized values by summing up all the proteins of all fraction for each rap, it is noticably how the reps have been statistically adjusted. 
+
 ![**Barplot before and after Normalization of Control.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_ctrl.png)
 
 ![**Barplot before and after Normalization of RNAse.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_rnase.png)
+
 
 b) Fraction-wise Normalization - Scaling
 After creating the vectors with the normed values for each fraction, we were ready to scale our data. We created a for loop for each sample which first sums up the values of each fraction and sets this sum to 100. We then calculated the proportion for each protein amount in comparison to the scaled sum of the whole row. This gave us values of protein amount between 1 and 100 and a sum of 100 for the sum of a protein over all fractions. This facilitates the comparison of our values between the reps.
@@ -73,8 +90,7 @@ With our now smoothened data, we can now create a function that defines our maxi
 
 We defined a function that takes a protein from our normalized dataframes and goes through each fraction, comparing the protein amount in it to a m-number of values before and m-number of values after the to be determined fraction (m being an adjustable parameter, which allows for heightened robustness against outliers and fluctuation).
 
-```{r Definition of the peak-finding function, include = TRUE}
-
+```
 find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our first run we mainly want to observe the global maxima of each protein
   peaks_pos <- sapply(1:length(x), FUN = function(i) { #In "peaks_pos" all values are saved of positions where the function has found a peak in, while iterating over all fractions of all proteins
     if (x[i] == 0) return (numeric(0)) #If any value found is equal to 0, then said value will be returned as an empty one
@@ -85,28 +101,28 @@ find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our
                )
   return(unlist(peaks_pos)) #Finally, we return the unlisted list of "peaks_pos"
 }
-
 ```
+
 ## 4.2 Finding signifcant peaks
 
 
 
 
 ## 5.1 Clustering with K-means 
-K-means clustering can be used to identify clusters in a data set. In our project we can use it to identify proteins with similar characteristics in their shifts between control and RNase. When using k-means one can set the number of clusters (k). We chose different cluster amounts from two to six. 
-To determine which amount of clusters is the best, we used the silhouette and elbow method. The silhouette method calculates the distance of every point to its own and the neighbouring cluster (smallest distance of point i to a point that is not a member of its own cluster). Every point of them abtains a silhouette value between -1 and 1. 1 meaning that the point fits perfectly into its cluster and -1 meaning that it would be more appropriate to place it in a neighbouring cluster. By changing the amounts of clusters, the overall mean of the silhouette value of all points change. The higher this mean is, the more accurate the clustering works. 
-The elbow method calculates the Within-Cluster Sum of Squared Errors (WSS) and for different values of k. You have to chose the k for which the WSS first starts to diminish.
+K-means was used to identify proteins with similar characteristics in their shifts between control and RNase. We chose different cluster amounts from two to six. To determine which amount of clusters is the best, we used the silhouette and elbow method. 
 For our proteins the highest mean silhouette value is 0.5255658 for k=5.
 
 ![**K-means elbow plot .**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Kmeans_elbow.png)
-##5.2 Ttest to compute pvalues
+## 5.2 Ttest to compute pvalues
 
 Before coding the actual function to compute our ttest, we firstly created two empty vectors. One to put the pvalues in and one for the significant proteins. Afterwards we created a for loop that firstly creates a vector each for contol and RNase that contains the peaks of each protein. 
 As we encountered some problems with essentially constant values we used an if function to set the pvalue for proteins, which either have a duplicate in the control or rnase group, to 1. We set this value to 1 as this shows that there is absolutely no difference between the values which indicates that there cannot be a significant shift. This did sort out 78 proteins containing constant values and therefore we were then able to compute the two-sided ttest for all other proteins that differ in the amount of the six replicates. The computed pvalue was then adjusted using the method of Benjamini, Hochberg and Yekutiel to decrease the false discovery rate This left us with an amount of 1921 proteins that did show an significant shift.
 
+# 
 
-
-
+^[2] MacKay, David (2003). "Chapter 20. An Example Inference Task: Clustering" (PDF). Information Theory, Inference and Learning Algorithms. Cambridge University Press. pp. 284–292.
+^[3] Peter J. Rousseuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics. 20: 53–65.
+^[4]David A. Freedman (2009). Statistical Models: Theory and Practice. Cambridge University Press.
 
 
 
