@@ -762,6 +762,9 @@ for (i in 1:length(shift.model2)){
     true.neg2=true.neg2+1
   }}
 
+false.pos.rate= false.pos2/(false.pos2+true.neg2)
+false.neg.rate= false.neg2/(false.neg2+true.pos2)
+
 #########################################################################################################################
 
 ```
