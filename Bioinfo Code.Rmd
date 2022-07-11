@@ -15,14 +15,15 @@ library(cluster)
 
 MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP_HeLa_NS.csv", header=TRUE, row.names=1, sep = ";")
 
-#1. Clean Up and Normalization
-#1.1 Split dataset into 2 datasets. One dataset consists only of Control group and the other of RNase.
+#########################################################################################################################
+
+#Clean Up and Normalization
+#Split dataset into 2 datasets. One dataset consists only of Control group and the other of RNase.
 
 ctrl.matrix= cbind(MS_Table[, seq(1,150,2)]) #A Matrix with all Control values from MS_Table is assigned
 rnase.matrix=cbind(MS_Table[, seq(2,150,2)]) #same thing, but with all RNase values
 
-
-#1.2 Removing all zero rows
+#Removing all zero rows
 crep1=cbind(ctrl.matrix[,seq(1,75,3)])  #A Matrix with all control values from all 25 fractions from rep1 is assigned
 crep2=cbind(ctrl.matrix[,seq(2,75,3)])  #Same thing, but Control - Rep2 and eventually for Rep3 and same thing with RNase
 crep3=cbind(ctrl.matrix[,seq(3,75,3)])
@@ -45,7 +46,9 @@ allzero=sort(unique(append(allzero, c(rmv.rows.crep1,rmv.rows.crep2, rmv.rows.cr
 ctrl.matrix=ctrl.matrix[-allzero,]  #then we remove said rows/proteins by deleting "allzero" from ctrl. and rnase.matrix
 rnase.matrix=rnase.matrix[-allzero,]
 
-#1.3 Normalization
+#########################################################################################################################
+
+#Normalization
 ctrl.frc1=cbind(ctrl.matrix[,1:3])  #we create variables for each fraction on the three reps, both for control and RNase
 ctrl.frc2=cbind(ctrl.matrix[,4:6])
 ctrl.frc3=cbind(ctrl.matrix[,7:9])
@@ -158,16 +161,12 @@ norm.mean = function(x) {
   diff.rep2.rep3=abs(x[2]-x[3])
   
   if(diff.rep1.rep2<diff.rep1.rep3 && diff.rep1.rep2<diff.rep2.rep3) {
-    #print("rep1 and rep2")
     mean(c(x[1],x[2]))
   }else if (diff.rep1.rep3<diff.rep1.rep2 && diff.rep1.rep3<diff.rep2.rep3) {
-  #print("rep1 and rep3")
   mean(c(x[1],x[3]))
 } else { 
- # print("rep2 and rep3")
   mean(c(x[2],x[3]))
-  }
-}
+  }}
 
 #compute normalization factor 
 norm.fact.ctrl.frc1=norm.mean(mean.ctrl.frc1)/mean.ctrl.frc1  #norm.mean function applied to the first fraction and divided by the mean of the same fraction
@@ -275,10 +274,6 @@ norm.rnase.frc23=data.frame(mapply('*', rnase.frc23, norm.fact.rnase.frc23, SIMP
 norm.rnase.frc24=data.frame(mapply('*', rnase.frc24, norm.fact.rnase.frc24, SIMPLIFY=FALSE))
 norm.rnase.frc25=data.frame(mapply('*', rnase.frc25, norm.fact.rnase.frc25, SIMPLIFY=FALSE))
 
-
-#organize the different samples
-condition <- factor(rep(c("ctrl1","rnase1","ctrl2","rnase2","ctrl3","rnase3"),25))
-
 # create vectors containing norm values of fraction 1 to 25
 norm.ctrl1 <- cbind(norm.ctrl.frc1[1],norm.ctrl.frc2[1],norm.ctrl.frc3[1],norm.ctrl.frc4[1],norm.ctrl.frc5[1],norm.ctrl.frc6[1],norm.ctrl.frc7[1],norm.ctrl.frc8[1],norm.ctrl.frc9[1],norm.ctrl.frc10[1],norm.ctrl.frc11[1],norm.ctrl.frc12[1],norm.ctrl.frc13[1],norm.ctrl.frc14[1],norm.ctrl.frc15[1],norm.ctrl.frc16[1],norm.ctrl.frc17[1],norm.ctrl.frc18[1],norm.ctrl.frc19[1],norm.ctrl.frc20[1],norm.ctrl.frc21[1],norm.ctrl.frc22[1],norm.ctrl.frc23[1],norm.ctrl.frc24[1],norm.ctrl.frc25[1])
 
@@ -293,7 +288,9 @@ norm.rnase.frc13[2],norm.rnase.frc14[2],norm.rnase.frc15[2],norm.rnase.frc16[2],
 
 norm.rnase3 <- cbind(norm.rnase.frc1[3],norm.rnase.frc2[3],norm.rnase.frc3[3],norm.rnase.frc4[3],norm.rnase.frc5[3],norm.rnase.frc6[3],norm.rnase.frc7[3],norm.rnase.frc8[3],norm.rnase.frc9[3],norm.rnase.frc10[3],norm.rnase.frc11[3],norm.rnase.frc12[3],norm.rnase.frc13[3],norm.rnase.frc14[3],norm.rnase.frc15[3],norm.rnase.frc16[3],norm.rnase.frc17[3],norm.rnase.frc18[3],norm.rnase.frc19[3],norm.rnase.frc20[3],norm.rnase.frc21[3],norm.rnase.frc22[3],norm.rnase.frc23[3],norm.rnase.frc24[3],norm.rnase.frc25[3])
 
-#Kurve smoothen 
+#########################################################################################################################
+
+#Smoothing the curve
 
 for (j in 1:nrow(norm.ctrl1)) #for j in 1 to the last row/protein
   for (i in 2:24) #for i in 2 to the 24th fraction 
@@ -319,7 +316,9 @@ for (j in 1:nrow(norm.rnase3))
   for (i in 2:24)
    norm.rnase3[j,i]=mean(c(norm.rnase3[j,i-1],norm.rnase3[j,i], norm.rnase3[j,i+1]))
 
+#################################################################################################################
 
+#Scaling to 100
 
 # normalization smaple 1ctrl
 datanormctrl1 <- as.data.frame(norm.ctrl1)  #turn matrix into dataframe by using "as.data.frame"
@@ -385,8 +384,10 @@ for (i in 1:nrow(datanormrnase3)) {
 
 rownames(datanormrnase3)=rownames(rnase.matrix)
 
+#######################################################################################################################
 
-##Correlation for Reproducibility 
+#Reproducibility 
+#amount of proteins before reproducubulity = 4732
 datac1=t(datanormctrl1) #we transpose the dataframes to make them more accesible for the calculation of the correlation
 datac2=t(datanormctrl2)
 datac3=t(datanormctrl3)
@@ -394,10 +395,6 @@ datar1=t(datanormrnase1)
 datar2=t(datanormrnase2)
 datar3=t(datanormrnase3)
 
-#ANZAHL AN PROTEINE = 4732
-#leere Vektoren erstellen 
-
-#klappt nur für protein 1-4000. danach anscheinend std =0 -> intervall nach hinten schieben, evt ohne transponieren
 r=0.7  #we set 0.7 or 70% as our threshold for correlating proteins
 
 ctrl12=c()  #we create empty vectors for each of the possible correlation combinations
@@ -431,9 +428,6 @@ rnase.low.cor=sort(append(rnase.low.cor,c(low.cor(rnase12,datar1, datar2),low.co
 
 rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor)) #we make sure we remove rows only once, by using "unique" on ctrl. and rnase.low.cor
 
-#81 proteins deleted --> 4676 proteins left
-
-
 rmv.low.cor.ctrl=c()  #empty vector for the low correlating values of control
 for ( i in 1:nrow(as.data.frame(table(ctrl.low.cor))))
 if(as.data.frame(table(ctrl.low.cor))[i,2]>1){
@@ -446,33 +440,20 @@ if(as.data.frame(table(rnase.low.cor))[i,2]>1){
   rmv.low.cor.rnase=append(rmv.low.cor.rnase, as.data.frame(table(rnase.low.cor))[i,1])
 }
 
-
 rmv.low.cor=c()
 rmv.low.cor=unique(append(rmv.low.cor,c(rmv.low.cor.ctrl,rmv.low.cor.rnase)))
 as.numeric(as.vector(rmv.low.cor))
 
-# wie viele punkte einbeziehen
-#erster und letzter wert 
-# diff(sign(diff)) ??
-# wie unterscheiden global vs lokal 
-# wie maxima? gröster wert oder größter peak 
-
-
 rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
 #81 proteins deleted --> 4676 proteins left
 
-datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),] #we remove the low correlating proteins from the dataframes
+#we remove the low correlating proteins from the dataframes
+datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),] 
 datanormctrl2=datanormctrl2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl3=datanormctrl3[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase1=datanormrnase1[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase2=datanormrnase2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
-
-# erster skalierungsschritt wichtig! selbe proteingesamtmenge pro versuch, keine verhältnisse einbeziehen!!
-# für jede franktion summe der 3 reps gleich?
-```
-
-```{r}
 
 #Mean of three reps to create one dataframe for control and rnase seperately
 mean.rep.ctrl=datanormctrl1
@@ -487,10 +468,8 @@ for (j in 1:nrow(datanormrnase1)){
   mean.rep.rnase[j,i]=mean(c(datanormrnase1[j,i],datanormrnase2[j,i], datanormrnase3[j,i]))
 }}
 
+#####################################################################################################################
 
-```
-
-```{r}
 #2. Finding Maxima
 #2.1 Finding position of maxima peaks
 
@@ -520,17 +499,8 @@ find_sig_peaks <- function(x, threshold = 3) {  #we create a function with the e
         )
 }
 
-
- 
- #T-Test Abweichungen ausgleichen bei vielen T-tests für die einzelne Proteine
-
-```
-```{r}
-#compute difference between rnase and control group to indicate left, right or no shift
-
-
-
-peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3) #find_sig_peaks used on mean.rep.ctrl and rnase
+#find_sig_peaks used on mean.rep.ctrl and rnase
+peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3)
 peaks.rnase = find_sig_peaks(mean.rep.rnase, threshold = 3)
 
 peaks.ctrl.mtrx <- as.matrix(peaks.ctrl)  #turn the peak values calculated into a matrix
@@ -539,29 +509,6 @@ peaks.rnase.mtrx <- as.matrix(peaks.rnase)
 peaks.ctrl.unlist <- unlist(peaks.ctrl.mtrx, use.names = TRUE)
 peaks.rnase.unlist <- unlist(peaks.rnase.mtrx)
 
-
-#shift <- c()
-#for (i in length(peaks.ctrl.mtrx)) {
-#append(shift, as.numeric(peaks.ctrl.mtrx[i]) - as.numeric(peaks.rnase.mtrx[i]))
-#}
-shift <- peaks.ctrl.unlist - peaks.rnase.unlist
-a = c()
-
-dgfffb <- for (i in 1:nrow(shift)) {
-            if (shift[i] > 0) {
-                a <- c(a,"left shift")
-             } else if (shift[i] < 0) {
-                a <- c(a,"right shift")
-            } else {
-                a <-c(a,"no shift")
-            }
-}
-# erstes element löschen
-# wie viele identifiziert, wie viele überlappen
-
-# cbind to creeate new coloumn for shift information
-
-#4656 proteins left 
 peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3) 
 peaks.rnase = find_sig_peaks(mean.rep.rnase, threshold = 3)
 peak.ctrl1= find_sig_peaks(datanormctrl1, threshold=3)
@@ -599,35 +546,10 @@ if(shift.mean[i]<0){
 }}
 RDP.matrix=cbind(RDP.name, RDP.pos) #matrix is created with the RDP names and the positions
 
-# cbind to create new coloumn for shift information
-color=c()
-peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)  #matrix that shows the peaks in control, in rnase and the shift between them
-for ( i in 1:nrow(peaks.allg)){
-  if (peaks.allg[i,3]>0){
-    color=append(color,c("green"))
-  }else if (peaks.allg[i,3]<0){
-    color=append(color,c("pink"))
-  }else{
-    color=append(color, c("blue"))
-  }
-}
-peaks.allg=cbind(peaks.allg, color)
-#k-means 
-g=cbind(peaks.ctrl.mtrx,peaks.rnase.mtrx)
-clus=kmeans(g, 3)
-fviz_cluster(clus,g, xlab=TRUE, ylab=TRUE, geom="point")
-shift.mean["MIEN1_HUMAN",]
-shift.mean["TEN1_HUMAN",]
-peaks.ctrl.mtrx["ZN622_HUMAN",]
-peaks.rnase.mtrx["ZN622_HUMAN",]
-#selber geplottet 
-#in Report: wenige punkte, weil proteine aufeinander sind, suche Bsp.
-plot.new()
-plot(peaks.allg[,1],peaks.allg[,2], type="p", lwd=1, col=color, pch=19)
-abline(coef=c(0,1), col="red")
 
+######################################################################################################################
 
-#t-tests
+#t-test
 pval <- c()
 sigproteins <- c()
 
@@ -663,12 +585,12 @@ for (i in 1:length(sigproteins)){
       sig.RDP=append(sig.RDP,RDP.matrix[j])   #length(similar.ttest)=401
     }}}
 
+#######################################################################################################################
 
-#k-means and testing with silhouette plot
-#clustering with 2 clusters
-
+#k-means 
 mtrx.kmeans=cbind(peaks.ctrl.mtrx,peaks.rnase.mtrx)
 
+#clustering with 2 clusters
 clus2=kmeans(mtrx.kmeans, 2)
 fviz_cluster(clus2,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
 sil2=fviz_silhouette(silhouette(clus2$cluster, dist(mtrx.kmeans)))
@@ -696,7 +618,7 @@ mean.sil4.width=mean(sil4.data$sil_width)
 
 #clustering with 5 clusters 
 clus5=kmeans(mtrx.kmeans, 5)
-fviz_cluster(clus5,mtrx.kmeans,xlab="Max Control",ylab="Max RNase", geom="point")
+fviz_cluster(clus5,mtrx.kmeans,xlab="Max Fraction Control",ylab="Max Fraction RNase", geom="point")
 fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
 sil5=fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
 sil5 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus5$cluster, .)
@@ -723,8 +645,7 @@ plot(1:k.max, wss,
      xlab="Number of Clusters k",
      ylab="Total Within-Clusters Sum of Squares", col="blue")
 
-#selber geplottet 
-#in Report: wenige punkte, weil proteine aufeinander sind, suche Bsp.
+#Clustering as expected
 color=c()
 peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)
 for ( i in 1:nrow(peaks.allg)){
@@ -741,9 +662,10 @@ plot.new()
 plot(peaks.allg[,1],peaks.allg[,2], type="p", lwd=1, col=color, pch=19)
 abline(coef=c(0,1), col="red")
 
-#Linear Regression f
-#andere Parameter benutzen
-#model with protein 1-4190 (90%)
+#########################################################################################################################
+
+#Linear Regression 
+#model1 with proteins 1-4190 (90%): predicts amount of fractions for a shift by correlation 
 corlm=c()
 t.mean.rep.ctrl=t(mean.rep.ctrl)
 t.mean.rep.rnase=t(mean.rep.rnase)
@@ -756,17 +678,91 @@ lm.data=data.frame(abs(shift.mean[1:(0.9*ncol(t.mean.rep.ctrl))]),corlm)
 colnames(lm.data)=c("Shift", "Corr")
 
 model=lm(Shift ~ Corr, data=lm.data)
-summary(model)
-model$coefficients
 cor.model=model$coefficients[2]*est.shift + model$coefficients[1]
 
-#try how the model works for the last 10% 
+#try how the model1 works for the last 10% 
 
 cor.model=c()
 for (i in (0.9*ncol(t.mean.rep.ctrl)):ncol(t.mean.rep.ctrl)){
 cor.model=append(cor.model, cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i]))
 }
 est.shift=(cor.model-model$coefficients[1])/model$coefficients[2]
+
+#Linear Regression 
+#model2 with proteins 1-4190 (90%): predicts whether there is a shift or not by correlation 
+corlm=c()
+  for (i in 1:(0.9*ncol(t.mean.rep.ctrl))){
+    corlm=append(corlm, (cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i])))
+  }
+shift.mean01=c()
+for (i in 1:length(shift.mean)){
+  if (shift.mean[i] != 0){
+    shift.mean01=append(shift.mean01,1)
+  }else{
+    shift.mean01=append(shift.mean01, shift.mean[i])
+  }
+}
+
+lm.data2=data.frame(shift.mean01[1:(0.9*ncol(t.mean.rep.ctrl))],corlm) 
+colnames(lm.data2)=c("Shift", "Corr")
+model2=lm(Shift ~ Corr, data=lm.data2)
+
+#try how the model2 works for the last 10% percent 
+cortry2=c()
+  for (i in (0.9*ncol(t.mean.rep.ctrl)):ncol(t.mean.rep.ctrl)){
+    cortry2=append(cortry2, (cor(t.mean.rep.ctrl[,i], t.mean.rep.rnase[,i])))
+  }
+shift.model2=(cortry2-model2$coefficients[1])/model2$coefficients[2]
+
+real.shift2=c()
+for (i in (0.9*ncol(t.mean.rep.ctrl)):ncol(t.mean.rep.ctrl)){
+  if (shift.mean[i] != 0){
+    real.shift2=append(real.shift,1)
+  }else{
+    real.shift2=append(real.shift2, shift.mean[i])
+  }
+}
+#estim.shift is a dataframe containing 0 or 1 for no shift or shift and estim. shift or not from the model2
+estim.shift2=data.frame(real.shift,shift.model2)
+
+#expand estim.shift with column that shows shift or not. Threshold is set to 0.2, meaning there is a shift
+t=0.2
+est.shift2=c()
+for (i in 1:length(shift.model2)){
+  if (shift.model2[i] >t){
+    est.shift2=append(est.shift2,1)
+  }else{
+    est.shift2=append(est.shift2, 0)
+  }
+}
+estim.shift2=data.frame(estim.shift, est.shift2)
+
+#calculating false positive, false negative, true positiv and true negative for model2
+false.pos2=0 #40
+for (i in 1:length(shift.model2)){
+  if (estim.shift2[i,1]<estim.shift2[i,3]){
+    false.pos2=false.pos2+1
+  }}
+  
+false.neg2=0 #39
+for (i in 1:length(shift.model2)){
+  if (estim.shift2[i,1]>estim.shift2[i,3]){
+    false.neg2=false.neg2+1
+  }}
+
+true.pos2=0 #55
+for (i in 1:length(shift.model2)){
+  if (sum(estim.shift2[i,1],estim.shift2[i,3])==2){
+    true.pos2=true.pos2+1
+  }}
+
+true.neg2=0 #332
+for (i in 1:length(shift.model2)){
+  if (sum(estim.shift2[i,1],estim.shift2[i,3])==0){
+    true.neg2=true.neg2+1
+  }}
+
+#########################################################################################################################
 
 ```
 
