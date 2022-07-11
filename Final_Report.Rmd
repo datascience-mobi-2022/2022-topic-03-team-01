@@ -3,8 +3,8 @@ title: "Proteome-wide Screen for RNA-dependent Proteins in Non-Synchronized HeLa
 author: "Alisa Kirkin, Sina Kühnel, Ignacio Lozano Onrubia, Greta Pick"
 date: "19/07/2022"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -91,14 +91,24 @@ With our now smoothened data, we can now create a function that defines our maxi
 We defined a function that takes a protein from our normalized dataframes and goes through each fraction, comparing the protein amount in it to a m-number of values before and m-number of values after the to be determined fraction (m being an adjustable parameter, which allows for heightened robustness against outliers and fluctuation).
 
 ```{r Definition of the peak-finding function, include = TRUE}
-find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our first run we mainly want to observe the global maxima of each protein
-  peaks_pos <- sapply(1:length(x), FUN = function(i) { #In "peaks_pos" all values are saved of positions where the function has found a peak in, while iterating over all fractions of all proteins
-    if (x[i] == 0) return (numeric(0)) #If any value found is equal to 0, then said value will be returned as an empty one
-    lborder <- max(c(1, i-m)) #This part of the function makes sure, we stay within our borders. While the function is iterating through the values it, it will do so and either return the value of the position it finds itself at or, in the most extreme of cases, return the value "1"
-    rborder <- min(c(i+m, length(x))) #Similarly to the lborder, rborder makes sure we stay within our borders, but on the other extreme (length(x) = 25)
-    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0)) #This part of the function will return the position of a maxima, in the case that when comparing its neighboring values of lborder and rborder, the maxima "i" is great or equal; if not, it will return an empty value and continue with the next position
-                      }
-               )
+find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our first 
+  #run we mainly want to observe the global maxima of each protein
+  peaks_pos <- sapply(1:length(x), FUN = function(i) { #In "peaks_pos" all values are 
+    #saved of positions where the function has found a peak in, while iterating over 
+    #all fractions of all proteins
+    if (x[i] == 0) return (numeric(0)) #If any value found is equal to 0, then said 
+    #value will be returned as an empty one
+    lborder <- max(c(1, i-m)) #This part of the function makes sure, we stay within 
+    #our borders. While the function is iterating through the values it, it will do 
+    #so and either return the value of the position it finds itself at or, in the most 
+    #extreme of cases, return the value "1"
+    rborder <- min(c(i+m, length(x))) #Similarly to the lborder, rborder makes sure 
+    #we stay within our borders, but on the other extreme (length(x) = 25)
+    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0)) #This part of 
+    #the function will return the position of a maxima, in the case that when comparing 
+    #its neighboring values of lborder and rborder, the maxima "i" is great or equal; 
+    #if not, it will return an empty value and continue with the next position
+    } )
   return(unlist(peaks_pos)) #Finally, we return the unlisted list of "peaks_pos"
 }
 ```
