@@ -90,7 +90,7 @@ With our now smoothened data, we can now create a function that defines our maxi
 
 We defined a function that takes a protein from our normalized dataframes and goes through each fraction, comparing the protein amount in it to a m-number of values before and m-number of values after the to be determined fraction (m being an adjustable parameter, which allows for heightened robustness against outliers and fluctuation).
 
-```
+```{r Definition of the peak-finding function, include = TRUE}
 find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our first run we mainly want to observe the global maxima of each protein
   peaks_pos <- sapply(1:length(x), FUN = function(i) { #In "peaks_pos" all values are saved of positions where the function has found a peak in, while iterating over all fractions of all proteins
     if (x[i] == 0) return (numeric(0)) #If any value found is equal to 0, then said value will be returned as an empty one
@@ -104,9 +104,9 @@ find_peaks <- function(x, m=50) { #In this case m was set to m=50, since for our
 ```
 
 ## 4.2 Finding signifcant peaks
+In the following step, we created a second part of the function, that should take the values out of the "peaks_pos" list or peaks positions list, and see if the protein amount in said peaks was higher than the defined threshold. If the values in "peaks_pos" are higher than the threshold, they are put into the peaks list. 
 
-
-
+Our intent is to just use the global maxima for the evaluation of the shifts, so by the end, we only had one peak, whenever the function was applied on a dataframe.
 
 ## 5.1 Clustering with K-means 
 K-means was used to identify proteins with similar characteristics in their shifts between control and RNase. We chose different cluster amounts from two to six. To determine which amount of clusters is the best, we used the silhouette and elbow method. 
