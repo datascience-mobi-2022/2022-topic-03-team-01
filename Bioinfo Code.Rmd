@@ -18,13 +18,13 @@ MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP
 #1. Clean Up and Normalization
 #1.1 Split dataset into 2 datasets. One dataset consists only of Control group and the other of RNase.
 
-ctrl.matrix= cbind(MS_Table[, seq(1,150,2)])
-rnase.matrix=cbind(MS_Table[, seq(2,150,2)])
+ctrl.matrix= cbind(MS_Table[, seq(1,150,2)]) #A Matrix with all Control values from MS_Table is assigned
+rnase.matrix=cbind(MS_Table[, seq(2,150,2)]) #same thing, but with all RNase values
 
 
 #1.2 Removing all zero rows
-crep1=cbind(ctrl.matrix[,seq(1,75,3)])
-crep2=cbind(ctrl.matrix[,seq(2,75,3)])
+crep1=cbind(ctrl.matrix[,seq(1,75,3)])  #A Matrix with all control values from all 25 fractions from rep1 is assigned
+crep2=cbind(ctrl.matrix[,seq(2,75,3)])  #Same thing, but Control - Rep2 and eventually for Rep3 and same thing with RNase
 crep3=cbind(ctrl.matrix[,seq(3,75,3)])
 rrep1=cbind(rnase.matrix[,seq(1,75,3)])
 rrep2=cbind(rnase.matrix[,seq(2,75,3)])
@@ -32,21 +32,21 @@ rrep3=cbind(rnase.matrix[,seq(3,75,3)])
 
 #creating vector (allzero) that contains all protein rows that consists only of zeros in at least one rep
 #allzero contains 8 proteins that are deleted from the original reps
-rmv.rows.crep1 = which(apply(crep1,1,function(x){sum(x)})==0)
+rmv.rows.crep1 = which(apply(crep1,1,function(x){sum(x)})==0) #"which" will indicate the rows, on which the function will be applied that checks, which row has a total sum equal to "0" and thus equals TRUE
 rmv.rows.crep2 = which(apply(crep2,1,function(x){sum(x)})==0)
 rmv.rows.crep3 = which(apply(crep3,1,function(x){sum(x)})==0)
 rmv.rows.rrep1 = which(apply(rrep1,1,function(x){sum(x)})==0)
 rmv.rows.rrep2 = which(apply(rrep2,1,function(x){sum(x)})==0)
 rmv.rows.rrep3 = which(apply(rrep3,1,function(x){sum(x)})==0)
 
-allzero=c()
+allzero=c() #new empty vector called allzero, to which the row positions given in rmv.rows will be added to
 allzero=sort(unique(append(allzero, c(rmv.rows.crep1,rmv.rows.crep2, rmv.rows.crep3, rmv.rows.rrep1, rmv.rows.rrep2, rmv.rows.rrep3))))
 
-ctrl.matrix=ctrl.matrix[-allzero,]
+ctrl.matrix=ctrl.matrix[-allzero,]  #then we remove said rows/proteins by deleting "allzero" from ctrl. and rnase.matrix
 rnase.matrix=rnase.matrix[-allzero,]
 
 #1.3 Normalization
-ctrl.frc1=cbind(ctrl.matrix[,1:3])
+ctrl.frc1=cbind(ctrl.matrix[,1:3])  #we create variables for each fraction on the three reps, both for control and RNase
 ctrl.frc2=cbind(ctrl.matrix[,4:6])
 ctrl.frc3=cbind(ctrl.matrix[,7:9])
 ctrl.frc4=cbind(ctrl.matrix[,10:12])
@@ -99,7 +99,7 @@ rnase.frc24=cbind(rnase.matrix[,70:72])
 rnase.frc25=cbind(rnase.matrix[,73:75])
 
 #mean von rep1, rep2, rep3
-mean.ctrl.frc1=apply(ctrl.frc1,2,function(x){mean(x)})
+mean.ctrl.frc1=apply(ctrl.frc1,2,function(x){mean(x)})  #we calculate the mean of the three reps on the same fraction, by creating an apply function that iterates over all proteins
 mean.ctrl.frc2=apply(ctrl.frc2,2,function(x){mean(x)})
 mean.ctrl.frc3=apply(ctrl.frc3,2,function(x){mean(x)})
 mean.ctrl.frc4=apply(ctrl.frc4,2,function(x){mean(x)})
@@ -153,7 +153,7 @@ mean.rnase.frc25=apply(rnase.frc25,2,function(x){mean(x)})
 
 #function "small.diff" find reps with smallest difference of the means
 norm.mean = function(x) {
-  diff.rep1.rep2=abs(x[1]-x[2])
+  diff.rep1.rep2=abs(x[1]-x[2]) #we assign arithmetic subtraction of one rep from the other for all possible combinations
   diff.rep1.rep3=abs(x[1]-x[3])
   diff.rep2.rep3=abs(x[2]-x[3])
   
@@ -170,7 +170,7 @@ norm.mean = function(x) {
 }
 
 #compute normalization factor 
-norm.fact.ctrl.frc1=norm.mean(mean.ctrl.frc1)/mean.ctrl.frc1
+norm.fact.ctrl.frc1=norm.mean(mean.ctrl.frc1)/mean.ctrl.frc1  #norm.mean function applied to the first fraction and divided by the mean of the same fraction
 norm.fact.ctrl.frc2=norm.mean(mean.ctrl.frc2)/mean.ctrl.frc2
 norm.fact.ctrl.frc3=norm.mean(mean.ctrl.frc3)/mean.ctrl.frc3
 norm.fact.ctrl.frc4=norm.mean(mean.ctrl.frc4)/mean.ctrl.frc4
@@ -223,7 +223,7 @@ norm.fact.rnase.frc24=norm.mean(mean.rnase.frc24)/mean.rnase.frc24
 norm.fact.rnase.frc25=norm.mean(mean.rnase.frc25)/mean.rnase.frc25
 
 #normed values 
-norm.ctrl.frc1=data.frame(mapply('*', ctrl.frc1, norm.fact.ctrl.frc1, SIMPLIFY=FALSE))
+norm.ctrl.frc1=data.frame(mapply('*', ctrl.frc1, norm.fact.ctrl.frc1, SIMPLIFY=FALSE))  #values are normed by multiplying the first fraction to the normalization factor of said fraction. Function iterates over all proteins
 norm.ctrl.frc2=data.frame(mapply('*', ctrl.frc2, norm.fact.ctrl.frc2, SIMPLIFY=FALSE))
 norm.ctrl.frc3=data.frame(mapply('*', ctrl.frc3, norm.fact.ctrl.frc3, SIMPLIFY=FALSE))
 norm.ctrl.frc4=data.frame(mapply('*', ctrl.frc4, norm.fact.ctrl.frc4, SIMPLIFY=FALSE))
@@ -295,9 +295,9 @@ norm.rnase3 <- cbind(norm.rnase.frc1[3],norm.rnase.frc2[3],norm.rnase.frc3[3],no
 
 #Kurve smoothen 
 
-for (j in 1:nrow(norm.ctrl1))
-  for (i in 2:24)
-   norm.ctrl1[j,i]=mean(c(norm.ctrl1[j,i-1],norm.ctrl1[j,i], norm.ctrl1[j,i+1]))
+for (j in 1:nrow(norm.ctrl1)) #for j in 1 to the last row/protein
+  for (i in 2:24) #for i in 2 to the 24th fraction 
+   norm.ctrl1[j,i]=mean(c(norm.ctrl1[j,i-1],norm.ctrl1[j,i], norm.ctrl1[j,i+1]))  #this function puts new mean values in place of the old ones by calculating the mean of the to be determined value of a fraction of a protein and it's left and right neighbor
 
 for (j in 1:nrow(norm.ctrl2))
   for (i in 2:24)
@@ -322,14 +322,14 @@ for (j in 1:nrow(norm.rnase3))
 
 
 # normalization smaple 1ctrl
-datanormctrl1 <- as.data.frame(norm.ctrl1)
+datanormctrl1 <- as.data.frame(norm.ctrl1)  #turn matrix into dataframe by using "as.data.frame"
 
-for (i in 1:nrow(datanormctrl1)) {
-  x <- sum(datanormctrl1[i, ]) / 100
-  datanormctrl1[i, ] = datanormctrl1[i, ] / x
+for (i in 1:nrow(datanormctrl1)) {  #for i from the first protein to the last of the dataframe
+  x <- sum(datanormctrl1[i, ]) / 100  #define variable x as the sum of all fractions of a proteins and divide them by 100
+  datanormctrl1[i, ] = datanormctrl1[i, ] / x  #the very same rows of proteins then get divided by x and placed in the dataframe
 }
 
-rownames(datanormctrl1)=rownames(ctrl.matrix)
+rownames(datanormctrl1)=rownames(ctrl.matrix) #to make sure the dataframe has the same protein names in their place as the original matrix
 
 # normalization sample 2ctrl
 datanormctrl2 <- as.data.frame(norm.ctrl2)
@@ -387,7 +387,7 @@ rownames(datanormrnase3)=rownames(rnase.matrix)
 
 
 ##Correlation for Reproducibility 
-datac1=t(datanormctrl1)
+datac1=t(datanormctrl1) #we transpose the dataframes to make them more accesible for the calculation of the correlation
 datac2=t(datanormctrl2)
 datac3=t(datanormctrl3)
 datar1=t(datanormrnase1)
@@ -398,42 +398,43 @@ datar3=t(datanormrnase3)
 #leere Vektoren erstellen 
 
 #klappt nur für protein 1-4000. danach anscheinend std =0 -> intervall nach hinten schieben, evt ohne transponieren
-r=0.7
+r=0.7  #we set 0.7 or 70% as our threshold for correlating proteins
 
-ctrl12=c()
+ctrl12=c()  #we create empty vectors for each of the possible correlation combinations
 ctrl13=c()
 ctrl23=c()
 rnase12=c()
 rnase13=c()
 rnase23=c()
 
-low.cor=function(x,a,b){
-  for (i in 1:ncol(datac1)){
-    x=append(x, (cor(a[,i], b[,i])))
+low.cor=function(x,a,b){  #we create a function with elements "x", "a" and "b"
+  for (i in 1:ncol(datac1)){  #for i in 1 to the last column (transposed) of datac1
+    x=append(x, (cor(a[,i], b[,i])))  #we append to the variable x, a variable x with the values of the correlations between a and b
   }
    r=0.7
-   which(x<=r)
+   which(x<=r)  #then all positions where x is smaller or equal to r=0.7 shall be marked
 }
 
-low.cor(ctrl12,datac1, datac2)
+low.cor(ctrl12,datac1, datac2)  #"low.cor" function is applied to all possible combinations
 low.cor(ctrl13,datac1, datac3)
 low.cor(ctrl23,datac2, datac3)
 low.cor(rnase12,datar1, datar2)
 low.cor(rnase13,datar1, datar3)
 low.cor(rnase23,datar2, datar3)
 
-ctrl.low.cor=c()
+ctrl.low.cor=c()  #empty vector created, where all low correlating proteins will be moved to
 ctrl.low.cor=sort(append(ctrl.low.cor,c(low.cor(ctrl12,datac1, datac2),low.cor(ctrl13,datac1, datac3),low.cor(ctrl23,datac2, datac3))))
 
 rnase.low.cor=c()
 rnase.low.cor=sort(append(rnase.low.cor,c(low.cor(rnase12,datar1, datar2),low.cor(rnase13,datar1, datar3),low.cor(rnase23,datar2, datar3))))
 
 
-rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
+rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor)) #we make sure we remove rows only once, by using "unique" on ctrl. and rnase.low.cor
+
 #81 proteins deleted --> 4676 proteins left
 
 
-rmv.low.cor.ctrl=c()
+rmv.low.cor.ctrl=c()  #empty vector for the low correlating values of control
 for ( i in 1:nrow(as.data.frame(table(ctrl.low.cor))))
 if(as.data.frame(table(ctrl.low.cor))[i,2]>1){
   rmv.low.cor.ctrl=append(rmv.low.cor.ctrl, as.data.frame(table(ctrl.low.cor))[i,1])
@@ -460,7 +461,7 @@ as.numeric(as.vector(rmv.low.cor))
 rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
 #81 proteins deleted --> 4676 proteins left
 
-datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),]
+datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),] #we remove the low correlating proteins from the dataframes
 datanormctrl2=datanormctrl2[-as.numeric(as.vector(rmv.low.cor)),]
 datanormctrl3=datanormctrl3[-as.numeric(as.vector(rmv.low.cor)),]
 datanormrnase1=datanormrnase1[-as.numeric(as.vector(rmv.low.cor)),]
@@ -477,7 +478,7 @@ datanormrnase3=datanormrnase3[-as.numeric(as.vector(rmv.low.cor)),]
 mean.rep.ctrl=datanormctrl1
 for (j in 1:nrow(datanormctrl1)){
   for (i in 1:25){
-  mean.rep.ctrl[j,i]=mean(c(datanormctrl1[j,i],datanormctrl2[j,i], datanormctrl3[j,i]))
+  mean.rep.ctrl[j,i]=mean(c(datanormctrl1[j,i],datanormctrl2[j,i], datanormctrl3[j,i])) #mean of every fraction of every rep is calculated and placed in the new matrix mean.rep.ctrl
 }}
 
 mean.rep.rnase=datanormrnase1
@@ -497,11 +498,11 @@ for (j in 1:nrow(datanormrnase1)){
 
 #Unser Code
 find_peaks <- function(x, m=50) { #in this case m was set to m=2 to start off, but will be adjusted accordingly after first results
-  peaks_pos <- sapply(1:length(x), FUN = function(i) {
-    if (x[i] == 0) return (numeric(0))
-    lborder <- max(c(1, i-m))
-    rborder <- min(c(i+m, length(x)))
-    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0))
+  peaks_pos <- sapply(1:length(x), FUN = function(i) {  #in peaks_pos values are going to be placed of the positions of the peaks
+    if (x[i] == 0) return (numeric(0))  #if the to be determined value is equal to 0 it will remain a 0
+    lborder <- max(c(1, i-m)) #left border makes sure we stay inside our fractions borders by always choosing the bigger out of 1 and i-m
+    rborder <- min(c(i+m, length(x))) #right border does the same on the right side by choosing the smaller one between i+m and length(x)=25
+    if(all(x[lborder:rborder] <= x[i])) return(i) else return(numeric(0)) #if all of the neighboring values are smaller/equal to the to be determined value then return the value, if not return 0
                       }
                )
   return(unlist(peaks_pos))
@@ -509,10 +510,10 @@ find_peaks <- function(x, m=50) { #in this case m was set to m=2 to start off, b
 
 #Function to only list those peaks above a certain threshold (in this case 3/3% since our data is normalized to 100%)
 
-find_sig_peaks <- function(x, threshold = 3) {
+find_sig_peaks <- function(x, threshold = 3) {  #we create a function with the elements x and threshold
         apply(x, 1, function(x) {
-          peaks <- find_peaks(x)
-          peaks <- peaks[x[peaks] > threshold]
+          peaks <- find_peaks(x)  #to the variable peaks, all values after using the find_peaks function
+          peaks <- peaks[x[peaks] > threshold]  #if the values in peaks are bigger than our threshold then keep them in peaks
           unlist(peaks)
           peaks
              }
@@ -529,10 +530,10 @@ find_sig_peaks <- function(x, threshold = 3) {
 
 
 
-peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3) 
+peaks.ctrl = find_sig_peaks(mean.rep.ctrl, threshold = 3) #find_sig_peaks used on mean.rep.ctrl and rnase
 peaks.rnase = find_sig_peaks(mean.rep.rnase, threshold = 3)
 
-peaks.ctrl.mtrx <- as.matrix(peaks.ctrl)
+peaks.ctrl.mtrx <- as.matrix(peaks.ctrl)  #turn the peak values calculated into a matrix
 peaks.rnase.mtrx <- as.matrix(peaks.rnase)
 
 peaks.ctrl.unlist <- unlist(peaks.ctrl.mtrx, use.names = TRUE)
@@ -581,7 +582,7 @@ peaks.rnase3.mtrx = unlist(as.matrix(peak.rnase3))
 
 peaks.mtrx=cbind(peaks.ctrl1.mtrx, peaks.ctrl2.mtrx, peaks.ctrl3.mtrx, peaks.rnase1.mtrx, peaks.rnase2.mtrx, peaks.rnase3.mtrx)
 
-shift.mean=peaks.ctrl.mtrx-peaks.rnase.mtrx
+shift.mean=peaks.ctrl.mtrx-peaks.rnase.mtrx #shift is calculated by subtracting the rnase peak values from the control peak values
 shift.mtrx1=peaks.ctrl1.mtrx-peaks.rnase1.mtrx
 shift.mtrx2=peaks.ctrl2.mtrx-peaks.rnase2.mtrx
 shift.mtrx3=peaks.ctrl3.mtrx-peaks.rnase3.mtrx
@@ -596,11 +597,11 @@ if(shift.mean[i]<0){
   RDP.name=append(RDP.name,rnames[i])
   RDP.pos=append(RDP.pos, i)
 }}
-RDP.matrix=cbind(RDP.name, RDP.pos) #
+RDP.matrix=cbind(RDP.name, RDP.pos) #matrix is created with the RDP names and the positions
 
 # cbind to create new coloumn for shift information
 color=c()
-peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)
+peaks.allg=cbind(peaks.ctrl.mtrx, peaks.rnase.mtrx,shift.mean)  #matrix that shows the peaks in control, in rnase and the shift between them
 for ( i in 1:nrow(peaks.allg)){
   if (peaks.allg[i,3]>0){
     color=append(color,c("green"))
