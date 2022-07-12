@@ -577,14 +577,6 @@ for (i in 1:length(pval.adj)){
     sigproteins <- append(sigproteins, rnames[i]) #length(sigproteins)=1921
   } }
 
-#find similar proteins between sigproteins and RDP.matrix. sigproteins contains also right-shifted proteins that are not RDPs, those will be eliminated. Also only RDPs with a significant shift will be chosen.
-sig.RDP=c()
-for (i in 1:length(sigproteins)){
-  for (j in 1:nrow(RDP.matrix)){
-    if(sigproteins[i]==RDP.matrix[j,1]){
-      sig.RDP=append(sig.RDP,RDP.matrix[j])   #length(similar.ttest)=401
-    }}}
-
 #######################################################################################################################
 
 #k-means 
@@ -792,7 +784,54 @@ for (i in 1:length(shift.model2)){
 false.pos.rate= false.pos2/(false.pos2+true.neg2)
 false.neg.rate= false.neg2/(false.neg2+true.pos2)
 
-#########################################################################################################################
+########################################################################################################################
+
+#Comparison of different methods to identify RDPs
+#a) shift information and t-test
+RDP_Table <- read.table("/Users/gretapick/Documents/Studium/4. Semester/Bioinformatik/RBP_Table.csv", header=TRUE, row.names=NULL, sep=";")
+RDP_Table=RBP_Table[-which(RBP_Table[,2]==""),]
+
+#find similar proteins between sigproteins and RDP.matrix. sigproteins contain also right-shifted proteins that are not RDPs, those will be eliminated. Also only RDPs with a significant shift will be chosen.
+sig.RDP=c()
+for (i in 1:length(sigproteins)){
+  for (j in 1:nrow(RDP.matrix)){
+    if(sigproteins[i]==RDP.matrix[j,1]){
+      sig.RDP=append(sig.RDP,RDP.matrix[j])   #length=401
+    }}}
+
+#find similar between sig.RDPs and RDP_Table. Those are true positives.
+true.pos.RDP=c()
+true.pos.pos.RDP=c()
+false.pos.RDP=c()
+for (i in 1:length(sig.RDP)){
+  for (j in 1:nrow(RDP_Table)){
+    if(sig.RDP[i]==RDP_Table[j,1]){
+      true.pos.RDP=append(true.pos.RDP,sig.RDP[i])#length=304 --> = true.pos
+      true.pos.pos.RDP=append(true.pos.pos.RDP, i)#position of true.pos in sig.RDP
+    }}}
+
+false.pos.RDP=sig.RDP[-true.pos.pos.RDP] #length =97 --> = false positives
+
+#b) k-means 
+clus5.RDP=c() #creating vector containing all RDPs identified by k-means in cluster 5
+for (i in 1:nrow(mtrx.kmeans)){
+if(clus5$cluster[i]==5){
+  clus5.RDP=append(clus5.RDP, rnames[i]) #length =551
+}}
+
+#find similar proteins between cluster5 and RDP_Table. Those are true posiitives.
+true.pos.clus5=c()
+true.pos.pos.clus5=c()
+false.pos.clus5=c()
+for (i in 1:length(clus5.RDP)){
+  for (j in 1:nrow(RDP_Table)){
+    if(clus5.RDP[i]==RDP_Table[j,1]){
+      true.pos.clus5=append(true.pos.clus5,clus5.RDP[i]) #length=424 --> = true positives
+      true.pos.pos.clus5=append(true.pos.pos.clus5, i) #position of true.pos in clus5.RDP
+    }}}
+
+false.pos.clus5=clus5.RDP[-true.pos.pos.clus5] #length =127 --> = false positives
+
 
 ```
 
