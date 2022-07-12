@@ -634,6 +634,33 @@ sil6 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus6$cluster, .)
 sil6.data <- data.frame(cluster = factor(sil6[, 1]), sil_width = sil6[, 3])
 mean.sil6.width=mean(sil6.data$sil_width)
 
+#cluster für report 
+shift <- peaks.ctrl.unlist - peaks.rnase.unlist
+shift.type = c()
+
+dgfffb <- for (i in 1:nrow(shift)) {
+            if (shift[i] > 0) {
+                shift.type <- c(shift.type,"left shift")
+             } else if (shift[i] < 0) {
+                shift.type <- c(shift.type,"right shift")
+            } else {
+                shift.type <- c(shift.type,"no shift")
+            }
+}
+
+shift.kmeans = mtrx.kmeans
+kmshift=as.data.frame(shift.kmeans)
+kmshift$shift.type = factor(shift.type)
+clusneu =kmeans(mtrx.kmeans,5)
+
+clusneu1 = clusneu$cluster
+kmshift$cluster = factor(clusneu1)
+ggscatter(
+  kmshift, x= "V1", y="V2",
+          color = "cluster", palette = c("red", "blue", "green", "orange", "purple", "pink"), ellipse = TRUE, ellipse.type = "convex",
+          shape = "shift.type", size = 2, legend = "right", ggtheme = theme_grey(), xlab = "MaxControl", ylab = "MaxRNase" )+
+  stat_mean(aes(color = cluster), size = 5)
+
 #elbow-plot
 k.max <- 15
 data <- mtrx.kmeans
@@ -717,13 +744,13 @@ shift.model2=(cortry2-model2$coefficients[1])/model2$coefficients[2]
 real.shift2=c()
 for (i in (0.9*ncol(t.mean.rep.ctrl)):ncol(t.mean.rep.ctrl)){
   if (shift.mean[i] != 0){
-    real.shift2=append(real.shift,1)
+    real.shift2=append(real.shift2,1)
   }else{
     real.shift2=append(real.shift2, shift.mean[i])
   }
 }
 #estim.shift is a dataframe containing 0 or 1 for no shift or shift and estim. shift or not from the model2
-estim.shift2=data.frame(real.shift,shift.model2)
+estim.shift2=data.frame(real.shift2,shift.model2)
 
 #expand estim.shift with column that shows shift or not. Threshold is set to 0.2, meaning there is a shift
 t=0.2
@@ -735,7 +762,7 @@ for (i in 1:length(shift.model2)){
     est.shift2=append(est.shift2, 0)
   }
 }
-estim.shift2=data.frame(estim.shift, est.shift2)
+estim.shift2=data.frame(estim.shift2, est.shift2)
 
 #calculating false positive, false negative, true positiv and true negative for model2
 false.pos2=0 #40
