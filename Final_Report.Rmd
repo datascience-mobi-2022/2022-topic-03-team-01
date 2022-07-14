@@ -154,6 +154,15 @@ To verify our results we compared our analysis with information from RDeeP by Ma
 
 # 4. Discussion and Conclusion
 
+To conclude the report on our project we would like to discuss our results and the methods used to achieve them. 
+The normalization of our data set as well as the data clean-up were satisfactory and in line with our expectations from the project proposal. 
+As a next step we were planning on conducting a Gaussian fitting for each protein, in order to obtain smoother values. However due to time constrains we did not end up using this method.  For better accuracy of results and improved noise reduction this could be added in the future. 
+While determining the maxima of each protein we were only considering global maxima for our final results. This could explain our high false negative rate as local maxima potentially allow to detect more shifts in control compared to RNAse. For better accuracy of the data, in the future local maxima should be considered as well global maxima in order to be able to identify more protein shifts and thus more RDPs.
+An additional improvement would be to conduct a multiple linear regression model containing more variables to expand our research and to use more methods to cluster our data (e.g PCA) in order to have an even more precise identification of left-shifting proteins.
+
+In conclusion we are satisfied with our results and proud of the work we have done. However, with more time on our hands the automated RDP detection could be improved to be more precise and efficient in the future.
+
+
 # 5 Outlook
 
 # 6. References 
