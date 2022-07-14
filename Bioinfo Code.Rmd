@@ -19,7 +19,7 @@ MS_Table <- read.table("/Users/sinakuhnel/Desktop/Uni 1/FS4/Bioinfoprojekt/RDeeP
 
 #Clean Up and Normalization
 #Split dataset into 2 datasets. One dataset consists only of Control group and the other of RNase.
-
+#nrow(ctrl.matrix)=4765
 ctrl.matrix= cbind(MS_Table[, seq(1,150,2)]) #A Matrix with all Control values from MS_Table is assigned
 rnase.matrix=cbind(MS_Table[, seq(2,150,2)]) #same thing, but with all RNase values
 
@@ -32,7 +32,7 @@ rrep2=cbind(rnase.matrix[,seq(2,75,3)])
 rrep3=cbind(rnase.matrix[,seq(3,75,3)])
 
 #creating vector (allzero) that contains all protein rows that consists only of zeros in at least one rep
-#allzero contains 8 proteins that are deleted from the original reps
+#allzero contains 33 proteins that are deleted from the original reps
 rmv.rows.crep1 = which(apply(crep1,1,function(x){sum(x)})==0) #"which" will indicate the rows, on which the function will be applied that checks, which row has a total sum equal to "0" and thus equals TRUE
 rmv.rows.crep2 = which(apply(crep2,1,function(x){sum(x)})==0)
 rmv.rows.crep3 = which(apply(crep3,1,function(x){sum(x)})==0)
@@ -445,7 +445,7 @@ rmv.low.cor=unique(append(rmv.low.cor,c(rmv.low.cor.ctrl,rmv.low.cor.rnase)))
 as.numeric(as.vector(rmv.low.cor))
 
 rmv.low.cor=unique(c(ctrl.low.cor,rnase.low.cor))
-#81 proteins deleted --> 4676 proteins left
+#76 proteins deleted --> 4656 proteins left
 
 #we remove the low correlating proteins from the dataframes
 datanormctrl1=datanormctrl1[-as.numeric(as.vector(rmv.low.cor)),] 
@@ -588,7 +588,7 @@ fviz_cluster(clus2,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
 sil2=fviz_silhouette(silhouette(clus2$cluster, dist(mtrx.kmeans)))
 sil2 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus2$cluster, .)
 sil2.data <- data.frame(cluster = factor(sil2[, 1]), sil_width = sil2[, 3])
-mean.sil2.width=mean(sil2.data$sil_width)
+mean.sil2.width=mean(sil2.data$sil_width) #0.545
 
 #clustering with 3 clusters
 clus3=kmeans(mtrx.kmeans, 3)
@@ -597,7 +597,7 @@ fviz_silhouette(silhouette(clus3$cluster, dist(mtrx.kmeans)))
 sil3=fviz_silhouette(silhouette(clus3$cluster, dist(mtrx.kmeans)))
 sil3 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus3$cluster, .)
 sil3.data <- data.frame(cluster = factor(sil3[, 1]), sil_width = sil3[, 3])
-mean.sil3.width=mean(sil3.data$sil_width)
+mean.sil3.width=mean(sil3.data$sil_width) #0.487
 
 #clustering with 4 clusters 
 clus4=kmeans(mtrx.kmeans, 4)
@@ -606,7 +606,7 @@ fviz_silhouette(silhouette(clus4$cluster, dist(mtrx.kmeans)))
 sil4=fviz_silhouette(silhouette(clus4$cluster, dist(mtrx.kmeans)))
 sil4 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus4$cluster, .)
 sil4.data <- data.frame(cluster = factor(sil4[, 1]), sil_width = sil4[, 3])
-mean.sil4.width=mean(sil4.data$sil_width)
+mean.sil4.width=mean(sil4.data$sil_width) #0.511
 
 #clustering with 5 clusters 
 clus5=kmeans(mtrx.kmeans, 5)
@@ -615,16 +615,16 @@ fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
 sil5=fviz_silhouette(silhouette(clus5$cluster, dist(mtrx.kmeans)))
 sil5 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus5$cluster, .)
 sil5.data <- data.frame(cluster = factor(sil5[, 1]), sil_width = sil5[, 3])
-mean.sil5.width=mean(sil5.data$sil_width)
+mean.sil5.width=mean(sil5.data$sil_width) #0.528
 
-#clustering with 6 clusters
+#clustering with 6 clusters 
 clus6=kmeans(mtrx.kmeans, 6)
 fviz_cluster(clus6,mtrx.kmeans, xlab=TRUE, ylab=TRUE, geom="point")
 fviz_silhouette(silhouette(clus6$cluster, dist(mtrx.kmeans)))
 sil6=fviz_silhouette(silhouette(clus6$cluster, dist(mtrx.kmeans)))
 sil6 <- mtrx.kmeans %>% dist(.) %>% silhouette(clus6$cluster, .)
 sil6.data <- data.frame(cluster = factor(sil6[, 1]), sil_width = sil6[, 3])
-mean.sil6.width=mean(sil6.data$sil_width)
+mean.sil6.width=mean(sil6.data$sil_width) #0.548
 
 #cluster für report 
 shift <- peaks.ctrl.unlist - peaks.rnase.unlist
@@ -811,6 +811,20 @@ for (i in 1:length(sig.RDP)){
     }}}
 
 false.pos.RDP=sig.RDP[-true.pos.pos.RDP] #length =97 --> = false positives
+
+true.neg.RDP=c()
+RDPindices=c()
+for (i in 1:length(sig.RDP)){
+  RDPindices=append(RDPindices,grep(sig.RDP[i],rnames)) #length=410?????
+}
+nonRDP=rnames[-RDPindices] #length=4246
+
+false.neg.RDP.indices=c()
+true.RDP=RDP_Table[,1]
+for (i in 1:length(nonRDP)){
+  false.neg.RDPindices = append(false.neg.RDP.indices, grep(nonRDP[i],true.RDP))
+}
+
 
 #b) k-means 
 clus5.RDP=c() #creating vector containing all RDPs identified by k-means in cluster 5
