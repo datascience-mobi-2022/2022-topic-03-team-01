@@ -536,6 +536,7 @@ shift.mtrx3=peaks.ctrl3.mtrx-peaks.rnase3.mtrx
 
 #Identify RNA-dependent proteins by creating matrix with only proteins with a left shift -> negative values in shift.mean
 #matrix should include the original row names of the RDPs
+#812 left-shifted proteins
 rnames=rownames(shift.mean)
 RDP.name=c()
 RDP.pos=c()
@@ -697,7 +698,6 @@ lm.data=data.frame(abs(shift.mean[1:(0.9*ncol(t.mean.rep.ctrl))]),corlm)
 colnames(lm.data)=c("Shift", "Corr")
 
 model=lm(Shift ~ Corr, data=lm.data)
-cor.model=model$coefficients[2]*est.shift + model$coefficients[1]
 
 #try how the model1 works for the last 10% 
 
@@ -838,6 +838,9 @@ for (i in 1:length(nonRDP)){
 }
 true.neg.RDP.indices= length(nonRDP)-length(false.neg.RDP.indices) # 1499 true negatives
 
+false.pos.rate.RDP=length(false.pos.RDP)/(true.neg.RDP.indices+length(false.pos.RDP)) # fals pos rate=6,08%
+false.neg.rate.RDP=length(false.neg.RDP.indices)/(length(true.pos.RDP)+length(false.neg.RDP.indices))#false neg rate=90,0% 
+
 #b) k-means 
 clus5.RDP=c() #creating vector containing all RDPs identified by k-means in cluster 5
 for (i in 1:nrow(mtrx.kmeans)){
@@ -867,6 +870,9 @@ for (i in 1:length(nonRDP.clus5)){
 } # 2634 false negatives 
 
 true.neg.clus5.indices=length(nonRDP.clus5)-length(false.neg.clus5.indices) # 1471 true negatives
+
+false.pos.rate.clus5=length(false.pos.clus5)/(true.neg.clus5.indices+length(false.pos.clus5)) # fals pos rate=7,95%
+false.neg.rate.clus5=length(false.neg.clus5.indices)/(length(true.pos.clus5)+length(false.neg.clus5.indices))# false neg rate = 85,2% 
 
 ########################################################################################################################
 
