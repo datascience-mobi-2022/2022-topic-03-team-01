@@ -121,7 +121,18 @@ In the following step, we created a second part of the function, that should tak
 
 Our intent is to just use the global maxima for the evaluation of the shifts, so by the end, we only had one peak, whenever the function was applied on a dataframe.
 
+<<<<<<< HEAD
 When comparing the global maxima of the same protein in the control experiment and the RNase experiment, we can appreciate a variety of shift types. These can be assigned to one of four groups: There are left shifts (Figure 7A), where the RNase peak is seen further left of the control peak. Similarly, the right shift (Figure 7B), portrays the RNase peak to the right of the control peak. No shift (Figure 7C) involves no difference in fractions between the peaks of control and RNase and Precipitated (Figure 7D) means both peaks are found at the last fractions respectively.
+=======
+![**Shift examples.**](Shift examples.png)
+
+## 5.1 Clustering with K-means 
+K-means was used to identify proteins with similar characteristics in their shifts between control and RNase. We chose different cluster amounts from two to six. To determine which amount of clusters is the best, we used the silhouette and elbow method. 
+For our proteins the highest mean silhouette value is 0.5255658 for k=5.
+
+![**K-means elbow plot .**](Kmeans_elbow.png)
+![**K-means clustering .**](K-means.png)
+>>>>>>> 4fe3ae24ca1e4e93071086d7680c36a31cfdf874
 
 
 ![**Shift examples.**](Shift examples.png){width=550px}
