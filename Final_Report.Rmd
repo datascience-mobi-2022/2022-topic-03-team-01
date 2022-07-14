@@ -23,7 +23,7 @@ All of them include RNA-binding proteins. RNA-binding proteins (RBP) are protein
 ## 1.1 Summary of experiment
 To identify RDPs a proteom-wide screen was conducted with mass-spectometry. HeLa S3 cels in different cell cycle stages were lysed (Fig. 1). The cell lysate was split into a control and an RNase gropup. The RNase group was treated with RNase which causes the degradation of RNase. RBPs can no longer bind to RNA and RBP-binding proteins to RBPs. The control group did not receive any further treatment and therefore all RNA and RDPs interact. The cell lysate was transferred onto a sucrose density gradient. After ultra centrifugation the RNA-protein complexes or proteins alone will end up in one of 25 fractions depending on their molecular weight. A heavy RNA-protein complex will travel further and land in a higher fraction than a single protein from the RNase treatment. This would create a left shift and is expected to happen for RDPs.
 
-![Generation of Data.](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Experiment.png)
+![Generation of Data.](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/Experiment.png)
 
 ## 1.2 Goals
 The main goal is to automatically identify RDPs on the basis of the fraction shift between control and RNase treatment. 
@@ -34,7 +34,7 @@ The main goal is to automatically identify RDPs on the basis of the fraction shi
 The dataset consists of 4765 rows which represent different proteins and 150 columns. Those include 3 replica for each of the 25 fractions for control and RNase treatment (3 x 25 x 2 = 150 columns). For every protein the protein amount in a certain fraction is given in arbitrary units.
 
 ## 2.2 T-tests
-The t-test is a statistical hypothesis test. It follows the student's t-distribution under the null hypothesis. It can be used to identify whether two sets of data are significantly different when compared to each other. A two-sampled t-test checks if the means of the two data sets are equal.The p-value computed is the probability of obtaining a more extreme value of the test statistics of the null hypothesis is valid. To determine when the probability is very low or high a significance level alpha has to be defined. If the p-value is smaller than the significance level the null hypothesis can be rejected and the observed effect is significant. If the p-value is larger than de significance level this means that the effect is not sufficient to reject the null hypothesis and there can be no significant effect seen.The standard value for alpha is 0.05. Furthermore it is important to checked the false discovery rate. For this the Benjamini-Hochberg procedure can be used. It controls that some small p-values happen by chance and this could lead to an incorrect rejection of the null hypothesis. It therefore reduces Type 1 errors. 
+The t-test is a statistical hypothesis test. It follows the student's t-distribution under the null hypothesis. It can be used to identify whether two sets of data are significantly different when compared to each other. A two-sampled t-test checks if the means of the two data sets are equal.The p-value computed is the probability of obtaining a more extreme value of the test statistics of the null hypothesis is valid. To determine when the probability is very low or high a significance level alpha has to be defined. If the p-value is smaller than the significance level the null hypothesis can be rejected and the observed effect is significant. If the p-value is larger than de significance level this means that the effect is not sufficient to reject the null hypothesis and there can be no significant effect seen.The standard value for alpha is 0.05. Furthermore it is important to checked the false discovery rate. For this the Benjamini-Hochberg procedure can be used. It controls that some small p-values happen by chance and this could lead to an incorrect rejection of the null hypothesis. It therefore reduces Type 1 errors. ^[1]
 
 ## 2.3 K-means
 K-means is a method for clustering that aims to structure *n* observations into *k* clusters. Each observation *n* is assigned to the cluster with the smallest eucledian distance to the clusters centroid. After the initial cluster is assigned to each observation, new centroids are set up to have the smallest distance to all its observations. To quantify which amouns of clusters *k* is the best the silhouette or elbow method can be used ^[2].
@@ -58,15 +58,15 @@ Goal of the normalization is to make the three different reps more similar by ap
 
 a) Repwise Normalization 
 
-![**Steps of Normalization.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization.png)
+![**Steps of Normalization.**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/Normalization.png)
 
 For simpler calculation we created subtables seperately for control and RNase containing only one fraction with all three reps (for both control and RNase group 50 subtables were created). For every subtable the mean over all the proteins for every rep from one fraction was calculated, creating 3 mean values in for each of the 50 subtables. 
 The function *smallest diff* was created to find the two reps for every individual fraction with the smallest difference of their mean values. The mean value of these two reps over all the proteins from one fraction was determined. The normalization factors for every fraction for each rep was calculated by dividing the mean from the most similar two reps by the individual means of one fraction for each rep (for each of the 50 subtables containing one fraction with three reps, three normalization factors were determined). By multiplying all the values of one fraction of one rep with its individual normalization factor, we received the normalized values for all reps and for both control and RNase group.
 When comparing the unnormed values with the normalized values by summing up all the proteins of all fraction for each rap, it is noticably how the reps have been statistically adjusted. 
 
-![**Barplot before and after Normalization of Control.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_ctrl.png)
+![**Barplot before and after Normalization of Control.**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/Normalization_ctrl.png)
 
-![**Barplot before and after Normalization of RNAse.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Normalization_rnase.png)
+![**Barplot before and after Normalization of RNAse.**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/Normalization_rnase.png)
 
 
 b) Fraction-wise Normalization - Scaling
@@ -80,8 +80,8 @@ Proteins that have a low correlation coefficient two or three times (three times
 To smoothen the curve, we created two for loops. The first loop goes through each row so that the second for loop is applied to each protein. The second loop takes fraction i and calculates the mean of fraction i, i-1 and i+1. This mean will then replace the original value of the protein amount in fraction i. Since there is no fraction before fraction 1 and no fraction after fraction 25, the second loop is only applied to fraction 2-24 for every protein of each rep. 
 We will still have 6 vectors containing every protein and its 25 fractions, but these values will now be more similar to its neighboring values due to the smoothing method we have applied.
 This step would be essential before fitting the curve to a Gaussian curve for certain proteins. In Figure 3 and 4 the result of smoothing can be seen for the protein AHNK_HUMAN. Individual fractions are corrected and the curve looks more familiar to the Gaussian curve.
-![**AHNK_HUMAN before Smoothing.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/before_smoothing.png)
-![**AHNK_HUMAN after Smoothing.**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/after_smoothing.png)
+![**AHNK_HUMAN before Smoothing.**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/before_smoothing.png)
+![**AHNK_HUMAN after Smoothing.**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/after_smoothing.png)
 
 # 4. Maxima  
 The relevance of the maxima for the definition of a Protein as one that binds to RNA lies in the premise, that the peaks of protein seen in a certain fraction within our control group will then have a peak shift once the same mass spectrometry has been performed in the presence of RNase. Thus, it is essential that we are able to find the maxima of each and every single protein, so that we can later on compare these values.
@@ -123,7 +123,10 @@ Our intent is to just use the global maxima for the evaluation of the shifts, so
 K-means was used to identify proteins with similar characteristics in their shifts between control and RNase. We chose different cluster amounts from two to six. To determine which amount of clusters is the best, we used the silhouette and elbow method. 
 For our proteins the highest mean silhouette value is 0.5255658 for k=5.
 
-![**K-means elbow plot .**](/Users/gretapick/Desktop/GitHub/2022-topic-03-team-01/Kmeans_elbow.png)
+![**K-means elbow plot .**](/Users/sinakuhnel/Desktop/GitHub/2022-topic-03-team-01/Kmeans_elbow.png)
+![**K-means clustering .**](K-means.png)
+
+
 ## 5.2 Ttest to compute pvalues
 
 Before coding the actual function to compute our ttest, we firstly created two empty vectors. One to put the pvalues in and one for the significant proteins. Afterwards we created a for loop that firstly creates a vector each for contol and RNase that contains the peaks of each protein. 
@@ -134,7 +137,7 @@ As we encountered some problems with essentially constant values we used an if f
 Our idea for model 1 was to use the correlation between the mean values of control and RNase to predict the amount of fractions for a shift for each protein. We used 90% of all proteins to create the linear regression. The p-value of the F statistic is 2.2*10-16, meaning that the null hypothesis could be rejected. For b0 we received 8.27 and for b1 -8.14. When looking at these numbers it is clear that the model does not work properly. It does not predict a shift of more than one fraction, but there are a number of proteins that have a shift of 2 or more fractions. This is why we rejected this model.
 This is why we created a second model which predicts whether there is a shift or not. A matrix containing the difference between the maxima fractions of control and RNase was converted to contain 1 when there is a shift and 0 when there is no shift. Model 2 also uses the correlation between control and RNase. The p-value of the F statistic is again smaller than 2.2*10^-16, b0 = 1.09 and b1 = -0.727. Then we tested the model with the other 10% of our proteins. A dataframe was created containing the real shift (0 or 1) and the predicted shift. Since the predicted shift is a number between 0 and 1, we set a threshold of 0.2. If the predicted shift is 0.2 or higher we estimate a shift and assign the number 1. If the predicted shift is smaller than 0.2 we estimate that this protein will not shift and assign the number 0. The false positive rate is 10,8% and false negative rate is 41,5%. Out of 466 proteins, 387 proteins were assigned correctly which means that model 2 predicted 83% of proteins correctly.
 
-
+^[1] B. L. Welch: The significance of the difference between two means when the population variances are unequal. In: Biometrika. Band 29, 1938, S. 350–362.
 ^[2] MacKay, David (2003). "Chapter 20. An Example Inference Task: Clustering" (PDF). Information Theory, Inference and Learning Algorithms. Cambridge University Press. pp. 284–292.
 ^[3] Peter J. Rousseuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics. 20: 53–65.
 ^[4]David A. Freedman (2009). Statistical Models: Theory and Practice. Cambridge University Press.
