@@ -152,7 +152,7 @@ In addition a t-test was conducted on all proteins. As a result, the vector *sig
 Another method of identifying RDPs is by using K-means clustering. Figure X shows that left-shifted proteins are concentraited in cluster number 5. We isolated the proteins of cluster 5 in the vector *clus5.RDP*. 551 proteins were found as RDPs.
 To verify our results we compared our analysis with information from RDeeP by Maiwen Caudron-Herger containging identified RDPs. For the shift model the false-positive rate is 6.1% and false-negative rate is 90%. For the k-mean model the false-positive rate is 8.0% and false-negative rate is 85%.
 
-# 4. Discussion and Conclusion
+# 4. Discussion, Outlook and Conclusion 
 
 To conclude the report on our project we would like to discuss our results and the methods used to achieve them. 
 The normalization of our data set as well as the data clean-up were satisfactory and in line with our expectations from the project proposal. 
@@ -160,12 +160,12 @@ As a next step we were planning on conducting a Gaussian fitting for each protei
 While determining the maxima of each protein we were only considering global maxima for our final results. This could explain our high false negative rate as local maxima potentially allow to detect more shifts in control compared to RNAse. For better accuracy of the data, in the future local maxima should be considered as well global maxima in order to be able to identify more protein shifts and thus more RDPs.
 An additional improvement would be to conduct a multiple linear regression model containing more variables to expand our research and to use more methods to cluster our data (e.g PCA) in order to have an even more precise identification of left-shifting proteins.
 
+A possible outlook into the future could be that automated RDP or RBP indentification becomes a reliable and quick-to-perform method. It is important for research to know about this characteristic of proteins in order to discover all their functions. Cancer, neurological diseases and muscular atrophy have already been identified to involve RBP, but there a likely to be more dieseases. Identifying their origin is a major hurdle and yet indispensable.
+
 In conclusion we are satisfied with our results and proud of the work we have done. However, with more time on our hands the automated RDP detection could be improved to be more precise and efficient in the future.
 
 
-# 5 Outlook
-
-# 6. References 
+# 5. References 
 ^1^ B. L. Welch: The significance of the difference between two means when the population variances are unequal. In: Biometrika. Band 29, 1938, S. 350–362.
 
 ^2^ MacKay, David (2003). "Chapter 20. An Example Inference Task: Clustering". Information Theory, Inference and Learning Algorithms. Cambridge University Press. pp. 284–292.
