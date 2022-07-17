@@ -132,7 +132,7 @@ For our proteins the highest mean silhouette value can be seen for k=5  with a m
 
 ![**K-means elbow plot .**](pictures for report/Kmeans_elbow.png){width=425px}
 
-![**K-means clustering .**](unnessasary/K-means.png){width=400px}
+![**K-means clustering .**](pictures for report/K-meansforreport.png){width=400px}
 
 
 ## 3.7 T-test to compute pvalues
