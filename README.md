@@ -24,5 +24,5 @@ Our project was divided into the following 5 main steps:
 5. Protein data bases as comparison and linear regression
 
 
-The report which accurately explains all of the aforementioned steps of our analysis is called *FinalReport.Rmd*.
+The report which accurately explains all of the aforementioned steps of our analysis is called *Topic003_Team001.pdf*. The accompanying code for the report is stored in the folder "Report" and is called "Topic003_Team001.Rmd. Our code for the entire project is stored under "Topic003_Team001_Code.Rmd".
 Furthermore our GitHub contains folders with our *project proposal*, *final presentation* as well as a folder containing all the pictures we have used throughout our report.
