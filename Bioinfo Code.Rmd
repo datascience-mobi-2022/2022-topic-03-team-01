@@ -825,9 +825,9 @@ for (i in 1:length(nonRDP)){
   false.neg.RDPindices = append(false.neg.RDP.indices, grep(nonRDP[i],true.RDP))
 }
 
-RDPindices=c()
+RDPindices=c() #creating vector with row number of RDPs to delete them afterwards and have only nonRDPs left
 for (i in 1:length(sig.RDP)){
-  RDPindices=append(RDPindices,grep(sig.RDP[i],rnames)) #length=410?????
+  RDPindices=append(RDPindices,grep(sig.RDP[i],rnames)) #length=401
 }
 nonRDP=rnames[-RDPindices] #length=4246
 
@@ -842,37 +842,39 @@ false.pos.rate.RDP=length(false.pos.RDP)/(true.neg.RDP.indices+length(false.pos.
 false.neg.rate.RDP=length(false.neg.RDP.indices)/(length(true.pos.RDP)+length(false.neg.RDP.indices))#false neg rate=90,0% 
 
 #b) k-means 
-clus5.RDP=c() #creating vector containing all RDPs identified by k-means in cluster 5
+clus4.RDP=c() #creating vector containing all RDPs identified by k-means in cluster 4
+clus4.RDP.indices=c() #creating vector containing row number of clus5 identified RDPs
 for (i in 1:nrow(mtrx.kmeans)){
 if(clus5$cluster[i]==5){
-  clus5.RDP=append(clus5.RDP, rnames[i]) #length =551
+  clus4.RDP=append(clus4.RDP, rnames[i])#length =551
+  clus4.RDP.indices=append(clus4.RDP.indices,i)
 }}
 
-#find similar proteins between cluster5 and RDP_Table. Those are true positives.
-true.pos.clus5=c()
-true.pos.pos.clus5=c()
-false.pos.clus5=c()
-for (i in 1:length(clus5.RDP)){
+#find similar proteins between cluster4 and RDP_Table. Those are true positives.
+true.pos.clus4=c()
+true.pos.pos.clus4=c()
+false.pos.clus4=c()
+for (i in 1:length(clus4.RDP)){
   for (j in 1:nrow(RDP_Table)){
-    if(clus5.RDP[i]==RDP_Table[j,1]){
-      true.pos.clus5=append(true.pos.clus5,clus5.RDP[i]) #length=424 --> = true positives
-      true.pos.pos.clus5=append(true.pos.pos.clus5, i) #position of true.pos in clus5.RDP
+    if(clus4.RDP[i]==RDP_Table[j,1]){
+      true.pos.clus4=append(true.pos.clus4,clus4.RDP[i]) #length=424 --> = true positives
+      true.pos.pos.clus4=append(true.pos.pos.clus4, i) #position of true.pos in clus5.RDP
     }}}
 
-false.pos.clus5=clus5.RDP[-true.pos.pos.clus5] #length =127 --> = false positives
+false.pos.clus4=clus4.RDP[-true.pos.pos.clus4] #length =127 --> = false positives
 
-nonRDP.clus5= rnames[-clus5.RDP.indices] #length = 4105
+nonRDP.clus4= rnames[-c(clus4.RDP.indices)] #length = 4105
 
-false.neg.clus5.indices=c()
+false.neg.clus4.indices=c()
 true.RDP=RDP_Table[,1]
-for (i in 1:length(nonRDP.clus5)){
-  false.neg.clus5.indices = append(false.neg.clus5.indices, c(grep(nonRDP.clus5[i],true.RDP, value=FALSE)))
+for (i in 1:length(nonRDP.clus4)){
+  false.neg.clus4.indices = append(false.neg.clus4.indices, c(grep(nonRDP.clus4[i],true.RDP, value=FALSE)))
 } # 2634 false negatives 
 
-true.neg.clus5.indices=length(nonRDP.clus5)-length(false.neg.clus5.indices) # 1471 true negatives
+true.neg.clus4.indices=length(nonRDP.clus4)-length(false.neg.clus4.indices) # 1471 true negatives
 
-false.pos.rate.clus5=length(false.pos.clus5)/(true.neg.clus5.indices+length(false.pos.clus5)) # fals pos rate=7,95%
-false.neg.rate.clus5=length(false.neg.clus5.indices)/(length(true.pos.clus5)+length(false.neg.clus5.indices))# false neg rate = 85,2% 
+false.pos.rate.clus4=length(false.pos.clus4)/(true.neg.clus4.indices+length(false.pos.clus4)) # fals pos rate=7,95%
+false.neg.rate.clus4=length(false.neg.clus4.indices)/(length(true.pos.clus4)+length(false.neg.clus4.indices))# false neg rate = 85,2% 
 
 ########################################################################################################################
 
