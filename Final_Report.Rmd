@@ -23,7 +23,7 @@ All of them include RNA-binding proteins. RNA-binding proteins (RBP) are protein
 ## 1.1 Summary of experiment
 To identify RDPs a proteom-wide screen was conducted with mass-spectometry. HeLa S3 cels in different cell cycle stages were lysed (Figure 1). The cell lysate was split into a control and an RNase gropup. The RNase group was treated with RNase which causes the degradation of RNase. RBPs can no longer bind to RNA and RBP-binding proteins to RBPs. The control group did not receive any further treatment and therefore all RNA and RDPs interact. The cell lysate was transferred onto a sucrose density gradient. After ultra centrifugation the RNA-protein complexes or proteins alone will end up in one of 25 fractions depending on their molecular weight. A heavy RNA-protein complex will travel further and land in a higher fraction than a single protein from the RNase treatment. This would create a left shift and is expected to happen for RDPs.
 
-![Generation of Data.](Experiment.png)
+![Generation of Data.](pictures for report/Experiment.png)
 
 ## 1.2 Goals
 The main goal is to automatically identify RDPs on the basis of the fraction shift between control and RNase treatment. 
@@ -58,15 +58,15 @@ Goal of the normalization is to make the three different reps more similar by ap
 
 ### 3.2.1 Repwise Normalization 
 
-![**Steps of Normalization.**](Normalization.png)
+![**Steps of Normalization.**](pictures for report/Normalization.png)
 
 For simpler calculation we created subtables seperately for control and RNase containing only one fraction with all three reps (for both control and RNase group 50 subtables were created). For every subtable the mean over all the proteins for every rep from one fraction was calculated, creating 3 mean values in for each of the 50 subtables. 
 The function *smallest diff* was created to find the two reps for every individual fraction with the smallest difference of their mean values. The mean value of these two reps over all the proteins from one fraction was determined (Figure 2). The normalization factors for every fraction for each rep was calculated by dividing the mean from the most similar two reps by the individual means of one fraction for each rep (for each of the 50 subtables containing one fraction with three reps, three normalization factors were determined). By multiplying all the values of one fraction of one rep with its individual normalization factor, we received the normalized values for all reps and for both control (Figure 3) and RNase (Figure 4) group.
 When comparing the unnormed values with the normalized values by summing up all the proteins of all fraction for each rap, it is noticably how the reps have been statistically adjusted. 
 
-![**Barplot before and after Normalization of Control.**](Normalization_ctrl.png){width=400px}
+![**Barplot before and after Normalization of Control.**](pictures for report/Normalization_ctrl.png){width=400px}
 
-![**Barplot before and after Normalization of RNAse.**](Normalization_rnase.png){width=400px}
+![**Barplot before and after Normalization of RNAse.**](pictures for report/Normalization_rnase.png){width=400px}
 
 
 ### 3.2.2 Fraction-wise Normalization - Scaling
@@ -81,9 +81,9 @@ To smoothen the curve, we created two for loops. The first loop goes through eac
 We will still have 6 vectors containing every protein and its 25 fractions, but these values will now be more similar to its neighboring values due to the smoothing method we have applied.
 This step would be essential before fitting the curve to a Gaussian curve for certain proteins. In Figure 5 and 6 the result of smoothing can be seen for the protein AHNK_HUMAN. Individual fractions are corrected and the curve looks more familiar to the Gaussian curve.
 
-![**AHNK_HUMAN before Smoothing.**](before_smoothing.png){width=400px}
+![**AHNK_HUMAN before Smoothing.**](pictures for report/before_smoothing.png){width=400px}
 
-![**AHNK_HUMAN after Smoothing.**](after_smoothing.png){width=400px}
+![**AHNK_HUMAN after Smoothing.**](pictures for report/after_smoothing.png){width=400px}
 
 ## 3.5 Maxima  
 The relevance of the maxima for the definition of a Protein as one that binds to RNA lies in the premise, that the peaks of protein seen in a certain fraction within our control group will then have a peak shift once the same mass spectrometry has been performed in the presence of RNase. Thus, it is essential that we are able to find the maxima of each and every single protein, so that we can later on compare these values.
@@ -123,16 +123,16 @@ Our intent is to just use the global maxima for the evaluation of the shifts, so
 
 When comparing the global maxima of the same protein in the control experiment and the RNase experiment, we can appreciate a variety of shift types. These can be assigned to one of four groups: There are left shifts (Figure 7A), where the RNase peak is seen further left of the control peak. Similarly, the right shift (Figure 7B), portrays the RNase peak to the right of the control peak. No shift (Figure 7C) involves no difference in fractions between the peaks of control and RNase and Precipitated (Figure 7D) means both peaks are found at the last fractions respectively.
 
-![**Shift examples.**](Shift examples.png){width=550px}
+![**Shift examples.**](pictures for report/Shift examples.png){width=550px}
 
 
 ## 3.6 Clustering with K-means 
 K-means was used to identify proteins with similar characteristics in their shifts between control and RNase. We chose different cluster amounts from two to six. To determine which amount of clusters is the best, we used the silhouette and elbow method (Figure 8). We then used the depicted amount of clusters to develop the k-means clustering (Figure 9).
 For our proteins the highest mean silhouette value can be seen for k=5  with a mean of 0.526. This indicates that 5 centroids placed at different points throughout the graph, allow the proteins to be assigned optimally to their closest cluster.
 
-![**K-means elbow plot .**](Kmeans_elbow.png){width=425px}
+![**K-means elbow plot .**](pictures for report/Kmeans_elbow.png){width=425px}
 
-![**K-means clustering .**](K-means.png){width=400px}
+![**K-means clustering .**](pictures for report/K-meansforreport.png){width=400px}
 
 
 ## 3.7 T-test to compute pvalues
